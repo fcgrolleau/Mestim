@@ -21,7 +21,7 @@ M_1 <- expression( ((1/(1+exp( -( beta_1 * x_1 + beta_2 * x_2 ) ))) - y ) * x_1 
 M_2 <- expression( ((1/(1+exp( -( beta_1 * x_1 + beta_2 * x_2 ) ))) - y ) * x_2 )
 est_functions <- list(M_1, M_2)
 
-## Pass arguments to get_vcov to obtain what you are looking for
+## Pass arguments to get_vcov and obtain what you are looking for
 res <- get_vcov(data=dat, betas=betas_hat, M=est_functions)
 ```
 Find more information in the <a href="https://github.com/fcgrolleau/Mestim/blob/master/man/doc.Rd"> documentation</a>.
