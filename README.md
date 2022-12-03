@@ -26,7 +26,7 @@ res <- get_vcov(data=dat, betas=betas_hat, M=est_functions)
 ```
 Find more information in the <a href="https://github.com/fcgrolleau/Mestim/blob/master/man/doc.Rd"> documentation</a>.
 
-### References
+### Reference
 Leonard A Stefanski and Dennis D. Boos.
 <b>The Calculus of M-Estimation.</b>
 2002.
