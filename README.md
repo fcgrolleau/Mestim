@@ -1,7 +1,7 @@
 # Mestim
 This package provides a flexible framework for estimating the variance-covariance matrix of a set of estimated parameters.
 Estimation relies on providing unbiased estimating functions to compute the empirical sandwich variance.
-
+<img src="figures/logo.gif" align="right" alt="" width="160" />
 :monkey:
 
 ### Installation
