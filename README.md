@@ -1,7 +1,8 @@
 # Mestim
 This package provides a flexible framework for estimating the variance-covariance matrix of a set of estimated parameters.
 Estimation relies on providing unbiased estimating functions to compute the empirical sandwich variance.
-<img src="figures/logo.png" align="right" alt="" width="160" />
+
+:monkey:
 
 ### Installation
 ```
@@ -23,7 +24,7 @@ est_functions <- list(M_1, M_2)
 ## Pass arguments to get_vcov to obtain what you are looking for
 res <- get_vcov(data=dat, betas=betas_hat, M=est_functions)
 ```
-Find a more information in the <a href="https://github.com/fcgrolleau/Mestim/blob/master/man/doc.Rd"> documentation</a>.
+Find more information in the <a href="https://github.com/fcgrolleau/Mestim/blob/master/man/doc.Rd"> documentation</a>.
 
 ### References
 Leonard A Stefanski and Dennis D. Boos.
