@@ -26,7 +26,7 @@ est_functions <- list(M_1, M_2)
 ## Pass arguments to get_vcov and obtain what you are looking for
 res <- get_vcov(data=dat, betas=betas_hat, M=est_functions)
 ```
-Find more information in the <a href="https://github.com/fcgrolleau/Mestim/blob/master/man/doc.Rd"> documentation</a>.
+Find more information in the <a href="https://github.com/fcgrolleau/Mestim/blob/master/man/doc.Rd"> R documentation</a>.
 
 ### Reference
 Leonard A Stefanski and Dennis D. Boos.
