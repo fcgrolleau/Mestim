@@ -12,6 +12,8 @@ install_github("fcgrolleau/Mestim")
 
 ### Implementation
 ```
+library("Mestim")
+
 # Put estimated parameters in a list
 betas_hat <- list(beta_1=coef(mod)[1], beta_2=coef(mod)[2])
 
