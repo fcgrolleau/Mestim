@@ -2,7 +2,7 @@
 This package provides a flexible framework for estimating the variance-covariance matrix of a set of estimated parameters.
 Estimation relies on providing unbiased estimating functions to compute the empirical sandwich variance.
 <a href="https://www.tandfonline.com/doi/abs/10.1198/000313002753631330">
-<img src="figures/minimal.gif" align="right" alt="" width="160" />what is this?</a> 
+<pre><img src="figures/minimal.gif" align="right" alt="" width="160" />    what is this?</pre> </a> 
 :monkey:
 
 ### Installation
