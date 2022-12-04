@@ -12,8 +12,10 @@ Our logo is produced by solving the Schrodinger equation for two spins starting 
 
 
 $$   \begin{pmatrix}
-      a & b \\
-      c & d \\
+1 & 2+i & 5-4i & 9+2i\\
+2-i & 4 & 6i & 4-i\\
+5+4i & -6i & 2 & 6+i\\
+9-2i & 4+i & 6-i & 7\\
    \end{pmatrix}$$
 
 Denoting respectively $\ket{E_j}$ and $E_j$ the eingenvectors and eignenvalues of $\mathbf{H}$, a solution to the Schrodinger equation is given by
