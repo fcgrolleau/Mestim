@@ -34,12 +34,11 @@ Stefanski, LA. and Boos DD. (2002)
 ####
 ## Simulate data
 ####
-
 n <- 10000 # number of simulated iid observations
 x_1 <- rnorm(n); x_2 <- rnorm(n) # generate x_1 and x_2
 true_betas <- c(2,3) # generate true parameters
 X <- model.matrix(~-1+x_1+x_2) # build the design matrix
-y <- rbinom(n, 1, 1/(1 + exp(-X %*% true_betas)) ) # generate Y from X and true_betas
+y <- rbinom(n, 1, 1/(1 + exp(-X \%*\% true_betas)) ) # generate Y from X and true_betas
 dat  <-  data.frame(x_1=x_1, x_2=x_2, y=y) # build a simulated dataset
 
 ####
