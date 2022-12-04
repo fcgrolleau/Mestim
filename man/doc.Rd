@@ -16,8 +16,19 @@ get_vcov(data, betas, M)
   \item{M}{a list of expressions detailing the unbiased estimating functions with the same ordering as betas.
   The variables and varameters names in the expressions need be consistent with those of data and betas}
 }
+\value{
+A list with elements \code{vcov}, \code{se}, and \code{jacob}.
+\item{vcov}{pxp matrix of the estimated asymptotic variance-covariance matrix of the estimated parameters betas.}
+\item{se}{length p vector of the estimated asymptotic standard error for the estimated parameters betas.}
+\item{jacob}{a list of lists containing expressions for computing the jacobian matrix.}
+}
 \author{
 François Grolleau <francois.grolleau@aphp.fr>
+}
+\references{
+Stefanski, LA. and Boos DD. (2002)
+\emph{The Calculus of M-Estimation, The American Statistician},
+\doi{10.1198/000313002753631330}.
 }
 \examples{
 ####
