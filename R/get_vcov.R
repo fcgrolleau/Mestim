@@ -1,7 +1,7 @@
 get_vcov <- function(data, betas, M){
 
   n <- nrow(data)
-  list2env(dat, environment())
+  list2env(data, environment())
   list2env(betas, environment())
   betas_names <- names(betas)
 
