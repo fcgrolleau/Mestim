@@ -12,7 +12,7 @@ $$\mathbf{H} =  \begin{pmatrix}
 9-2i & 4+i & 6-i & 7\\
    \end{pmatrix}.$$
 
-Denoting respectively $\ket{E_j}$ and $E_j$ the eingenvectors and eignenvalues of $\mathbf{H}$, a solution to the Schrodinger equation is given by
+With $\ket{E_j}$ and $E_j$ denoting the eingenvectors and eignenvalues of $\mathbf{H}$ respectively, a solution to the Schrodinger equation is given by
 $$\ket{\Psi(t)}=\sum_j \ket{E_j}\bra{E_j}\ket{\Psi(0)}e^{-\frac{i}{\hbar}E_jt}.$$
 
 The code that produces the figure is available <a href="https://github.com/fcgrolleau/Mestim/tree/master/R/schrodinger_dots.R">here</a>.
