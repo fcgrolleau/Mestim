@@ -1,2 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^README\.Rmd$ 
+^R/schrodinger_dots\.R$
+^figures$

@@ -2,7 +2,8 @@ Package: Mestim
 Type: Package
 Title: Computes the Variance-Covariance Matrix of a Set of Parameters using M-estimation.
 Version: 0.1.0
-Author: François Grolleau <francois.grolleau@aphp.fr>
+Author: François Grolleau 
+Maintainer: François Grolleau <francois.grolleau@aphp.fr>
 Description: Provides a flexible framework for estimating the variance-covariance matrix of a set of estimated parameters. Estimation relies on unbiased estimating functions to compute the empirical sandwich variance. (i.e., M-estimation in the vein of Stefanski & Boos (2002) <doi:10.1198/000313002753631330>).
 License: MIT
 Encoding: UTF-8
