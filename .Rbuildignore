@@ -3,3 +3,5 @@
 ^README\.Rmd$ 
 ^R/schrodinger_dots\.R$
 ^figures$
+^cran-comments\.md$
+^CRAN-SUBMISSION$
