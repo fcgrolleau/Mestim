@@ -6,7 +6,7 @@ get_vcov <- function(data, betas, M){
   betas_names <- names(betas)
 
   multi_deriv <- function(M_i){
-    lapply(betas_names, function(beta) D(M_i, beta))
+    lapply(betas_names, function(beta) stats::D(M_i, beta))
   }
 
   Jacob <- lapply(M, multi_deriv)
