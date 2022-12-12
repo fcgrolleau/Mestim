@@ -14,7 +14,7 @@ get_vcov(data, betas, M)
   \item{data}{a dataframe with proper variable (i.e., column) names.}
   \item{betas}{a list of the (properly named) estimated parameters.}
   \item{M}{a list of expressions detailing the unbiased estimating functions with the same ordering as betas.
-  The variables and varameters names in the expressions need be consistent with those of data and betas}
+  The variables and parameters names in the expressions need be consistent with those of data and betas.}
 }
 \value{
 A list with elements \code{vcov}, \code{se}, and \code{jacob}.
