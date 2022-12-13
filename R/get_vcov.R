@@ -1,11 +1,11 @@
-get_vcov <- function (data, betas, M)
+get_vcov <- function (data, thetas, M)
 {
   n <- nrow(data)
   list2env(data, environment())
-  list2env(betas, environment())
-  betas_names <- names(betas)
+  list2env(thetas, environment())
+  thetas_names <- names(thetas)
   multi_deriv <- function(M_i) {
-    lapply(betas_names, function(beta) D(M_i, beta))
+    lapply(thetas_names, function(beta) D(M_i, beta))
   }
   jacob <- lapply(M, multi_deriv)
   mid <- sapply(M, function(it) eval(it))
@@ -29,10 +29,10 @@ get_vcov <- function (data, betas, M)
   lat_inv <- solve(lat)
   Sigma <- lat_inv %*% mid %*% t(lat_inv)
   vcov <- Sigma/n
-  colnames(vcov) <- betas_names
-  rownames(vcov) <- betas_names
+  colnames(vcov) <- thetas_names
+  rownames(vcov) <- thetas_names
   se <- sqrt(diag(vcov))
-  names(se) <- betas_names
+  names(se) <- thetas_names
   res <- list(vcov = vcov, se = se, jacob = jacob)
   return(res)
 }
