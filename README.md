@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 
-[R-CMD-check](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)
+[![R-CMD-check](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)]
 [![Codecov test
 coverage](https://codecov.io/gh/cosimameyer/overviewR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/cosimameyer/overviewR?branch=master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/Mestim)](https://cran.r-project.org/package=Mestim)
