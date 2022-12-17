@@ -34,11 +34,6 @@ This package is written and maintained by François Grolleau (francois.grolleau@
 
 ### Reference
 - Stefanski, LA. and Boos DD.
-<b>The Calculus of M-Estimation.</b>
-2002.
-[<a href="https://www.tandfonline.com/doi/abs/10.1198/000313002753631330">The American Statistician</a>]
-<br>
+<b>The Calculus of M-Estimation.</b> 2002.[<a href="https://www.tandfonline.com/doi/abs/10.1198/000313002753631330">The American Statistician</a>]
 - Tsiatis, AA., Davidian, M., Holloway, ST. and Laber, EB.
-<b>Dynamic Treatment Regimes: Statistical Methods for Precision Medicine.</b>
-2019.
-[<a href="https://doi.org/10.1201/9780429192692">CRC Press</a>]
+<b>Dynamic Treatment Regimes: Statistical Methods for Precision Medicine.</b> 2019. [<a href="https://doi.org/10.1201/9780429192692">CRC Press</a>]
