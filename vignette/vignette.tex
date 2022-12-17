@@ -1,0 +1,800 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\title{An Introduction to \texttt{Mestim}}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Applied M-estimation and computation of the empirical sandwich
+variance.}
+\author{true}
+\date{December 16, 2022}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={An Introduction to Mestim},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+This vignette serves as a short introduction to computing the
+variance-covariance matrix of a multidimensional parameter using
+M-estimation and the empirical sandwich variance.
+
+\hypertarget{baby-review-of-m-estimation}{%
+\subsection{Baby review of
+M-estimation}\label{baby-review-of-m-estimation}}
+
+Denoting \(F\) a probability distribution, a \(p\)-dimensional
+M-estimator of \(\psi\)-type \(T\) solves the vector equation
+\[\int_\mathcal{Z}\psi\big(z, T(F)\big)dF(z)=\boldsymbol{0}.\] In
+practice, this means that the estimator \(T\) has an \emph{unbiased
+estimating function}
+\(\psi(z,\theta)=\{\psi_1(z,\theta), \ldots, \psi_p(z,\theta)\}^T\) with
+solution \(\hat{\theta}~(p\times 1)\) solving in \(\theta\) the
+\((p\times 1)\) set of ``stacked'' estimating equations given by
+\[ \sum_{i=1}^{n}\psi(Z_i,\theta)=\boldsymbol{0}.\] For a \(\psi\)-type
+M-estimator \(T\) with estimate \(\hat{\theta}\), under suitable
+regularity conditions for \(\psi\), the central limit theorem and
+Slutsky's theorem yield
+\[\sqrt{n}\big(\hat{\theta}-T(F)\big)\xrightarrow{\mathcal{D}}\mathcal{N}\big(0, \Sigma)\]
+where
+\[\Sigma=\Bigg[\mathbb{E}\bigg\{\frac{\partial \psi\big(Z,T(F)\big) }{\partial\theta^T}\bigg\}\Bigg]^{-1}\mathbb{E}\Big\{ \psi\big(Z,T(F)\big) \psi^T\big(Z,T(F)\big)\Big\}\Bigg[\mathbb{E}\bigg\{\frac{\partial \psi\big(Z,T(F)\big) }{\partial\theta^T}\bigg\}\Bigg]^{-T}.\]
+This implies that the \(p\)-dimentional M-estimator \(\hat{\theta}\) is
+an asymptotically normal, \(\sqrt{n}\)-consistent, estimator for
+\(T(F)\). See
+\href{http://ndl.ethernet.edu.et/bitstream/123456789/61932/1/265.pdf}{Boos
+and Stefanski (2013)} for a full introduction to M-estimation.
+
+\hypertarget{what-mestim-does}{%
+\subsection{\texorpdfstring{What \texttt{Mestim}
+does}{What Mestim does}}\label{what-mestim-does}}
+
+Provided with observed data \((Z_i)_{1≤i≤n}\), a \(p\)-dimensional
+vector of estimates \(\hat{\theta}\) and a \((p\times 1)\)
+\emph{unbiased estimating function} \(\psi\), the \texttt{Mestim}
+package computes the sandwich formula
+\[\hat{\Sigma}=\Bigg[n^{-1}\sum_{i=1}^n\bigg\{\frac{\partial \psi\big(Z_i,\hat{\theta}\big) }{\partial\theta^T}\bigg\}\Bigg]^{-1}
+n^{-1}\sum_{i=1}^n\Big\{ \psi\big(Z_i,\hat{\theta}\big) \psi^T\big(Z_i,\hat{\theta}\big)\Big\}
+\Bigg[n^{-1}\sum_{i=1}^n\bigg\{\frac{\partial \psi\big(Z_i,\hat{\theta}\big) }{\partial\theta^T}\bigg\}\Bigg]^{-T}.\]
+The estimated asymptotic variance-covariance matrix of \(\hat{\theta}\)
+is \(n^{-1} \hat{\Sigma}\), and so, we have
+\[\hat{\theta} \mathrel{\dot\sim} \mathcal{N}\big(0, n^{-1} \hat{\Sigma}).\]
+Under the hood, \texttt{Mestim} algorithmically computes the Jacobian
+matrix of \(\psi\); derivatives and outer products in \(\hat{\Sigma}\)
+are then computed in parallel. To compute the asymptotic
+variance-covariance matrix, the analyst thus only need to provide a list
+detailing the ``stacked'' estimating functions in \(\psi\). Below, we
+give examples of growing complexity to illustrate how \texttt{Mestim}
+can leverage the flexibility of M-estimation theory to calculate
+asymptotic standard errors (and confidence intervals) for parameter
+estimates \(\hat{\theta}\).
+
+\hypertarget{example-1-prediction-task-via-logistic-regression}{%
+\subsection{Example 1: Prediction task via logistic
+regression}\label{example-1-prediction-task-via-logistic-regression}}
+
+Let's try to compute the asymptotic standard errors of estimated
+parameters in a logistic regression model. This simple example serves to
+get familiar with \texttt{Mestim} commands.
+
+Let's generate syntetic data with two predictors and a binary outcome
+such that \(Z=(X_1,X_2,Y)^T\).
+
+\emph{click here to see the data generating process.}
+
+Here we use \[X_1 \sim \mathcal{N}(0,1)\] \[X_2 \sim \mathcal{N}(0,3)\]
+\[Y|X \sim \mathcal{B}\Big(\text{expit}(\beta_1^{0}X_1+\beta_2^{0}X_2)\Big)\]
+with \(\beta_1^{0}=4\), \(\beta_2^{0}=6\).
+
+NB: We use superscript \(^{0}\) to denote true values of the parameters.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gen\_lr\_dat }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, }\AttributeTok{seed=}\DecValTok{123}\NormalTok{)}
+\NormalTok{\{}
+\FunctionTok{set.seed}\NormalTok{(seed)}
+\NormalTok{X\_1 }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{sd =} \DecValTok{1}\NormalTok{); X\_2 }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{sd =} \DecValTok{3}\NormalTok{) }\CommentTok{\# generate x\_1 and x\_2}
+\NormalTok{true\_betas }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{) }\CommentTok{\# generate true parameters}
+\NormalTok{X }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(}\SpecialCharTok{\textasciitilde{}{-}}\DecValTok{1}\SpecialCharTok{+}\NormalTok{X\_1}\SpecialCharTok{+}\NormalTok{X\_2) }\CommentTok{\# build the design matrix}
+\NormalTok{Y }\OtherTok{\textless{}{-}} \FunctionTok{rbinom}\NormalTok{(n, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{X }\SpecialCharTok{\%*\%}\NormalTok{ true\_betas)) ) }\CommentTok{\# generate Y from X and true\_betas}
+\NormalTok{dat  }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{X\_1=}\NormalTok{X\_1, }\AttributeTok{X\_2=}\NormalTok{X\_2, }\AttributeTok{Y=}\NormalTok{Y) }\CommentTok{\# build a simulated dataset}
+\FunctionTok{return}\NormalTok{(dat)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat }\OtherTok{\textless{}{-}} \FunctionTok{gen\_lr\_dat}\NormalTok{(}\DecValTok{2000}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(dat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           X_1        X_2 Y
+## 1 -0.56047565 -1.5348112 0
+## 2 -0.23017749  0.7108136 1
+## 3  1.55870831 -1.6247675 0
+## 4  0.07050839  3.6576829 1
+## 5  0.12928774  0.5224076 1
+## 6  1.71506499 -1.8458049 0
+\end{verbatim}
+
+Let's fit a logistic regression model and put the estimated parameters
+in a list.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(Y}\SpecialCharTok{\textasciitilde{}{-}}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ X\_1 }\SpecialCharTok{+}\NormalTok{ X\_2, }\AttributeTok{data=}\NormalTok{dat, }\AttributeTok{family =} \StringTok{"binomial"}\NormalTok{)}
+\NormalTok{thetas\_hat }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{thetas\_1=}\FunctionTok{coef}\NormalTok{(mod)[}\DecValTok{1}\NormalTok{], }\AttributeTok{thetas\_2=}\FunctionTok{coef}\NormalTok{(mod)[}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+Recall that the estimated parameters
+\(\hat{\theta}=(\hat{\theta}_1, \hat{\theta}_2)^T\) from this logistic
+regression model jointly solve
+\[\sum_{i=1}^{n}\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{1,i}
+=0\] and
+\[\sum_{i=1}^{n}\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{2,i}
+=0.\] Therefore, we can identify
+\[\psi_1(Z_i,\theta_1)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{1,i}\]
+and
+\[\psi_2(Z_i,\theta_1)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{2,i}.\]
+With that in mind, let's build a list for the unbiased estimating
+function
+\(\psi(z,\theta)=\Big(\psi_1(z,\theta_1), \psi_2(z,\theta_2)\Big)^T\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{psi\_1 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( ((}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(thetas\_1 }\SpecialCharTok{*}\NormalTok{ X\_1 }\SpecialCharTok{+}\NormalTok{ thetas\_2 }\SpecialCharTok{*}\NormalTok{ X\_2)))) }\SpecialCharTok{{-}}\NormalTok{ Y) }\SpecialCharTok{*}\NormalTok{ X\_1 )}
+\NormalTok{psi\_2 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( ((}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(thetas\_1 }\SpecialCharTok{*}\NormalTok{ X\_1 }\SpecialCharTok{+}\NormalTok{ thetas\_2 }\SpecialCharTok{*}\NormalTok{ X\_2)))) }\SpecialCharTok{{-}}\NormalTok{ Y) }\SpecialCharTok{*}\NormalTok{ X\_2 )}
+\NormalTok{psi }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(psi\_1, psi\_2)}
+\end{Highlighting}
+\end{Shaded}
+
+NB: parameters' names (here \texttt{thetas\_1} and \texttt{thetas\_2})
+must be consistent with the previous list.
+
+We are finally ready to pass these arguments to the \texttt{get\_vcov}
+function form the \texttt{Mestim} package.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(Mestim)}
+\NormalTok{res }\OtherTok{\textless{}{-}} \FunctionTok{get\_vcov}\NormalTok{(}\AttributeTok{data=}\NormalTok{dat, }\AttributeTok{thetas=}\NormalTok{thetas\_hat, }\AttributeTok{M=}\NormalTok{psi)}
+\end{Highlighting}
+\end{Shaded}
+
+You can obtain the variance-covariance matrix from a \texttt{get\_vcov}
+result as follows
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res}\SpecialCharTok{$}\NormalTok{vcov}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           thetas_1  thetas_2
+## thetas_1 0.1769649 0.2118127
+## thetas_2 0.2118127 0.2815411
+\end{verbatim}
+
+\emph{click here to verify that the variance-covariance matrix from
+\texttt{get\_vcov} is similar to that of \texttt{glm}.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{vcov}\NormalTok{(mod)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           X_1       X_2
+## X_1 0.1420069 0.1582269
+## X_2 0.1582269 0.2111057
+\end{verbatim}
+
+This is indeed very close the results in\texttt{res\$vcov}.
+
+Asymptotic standard errors are square root of the diagonal elements from
+the estimated variance-covariance matrix. These are stored in the
+\texttt{se} attribute.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res}\SpecialCharTok{$}\NormalTok{se}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  thetas_1  thetas_2 
+## 0.4206720 0.5306045
+\end{verbatim}
+
+\hypertarget{example-2-average-treatment-effect-via-outcome-regression}{%
+\subsection{Example 2: Average treatment effect via outcome
+regression}\label{example-2-average-treatment-effect-via-outcome-regression}}
+
+Let's generate synthetic observational data with treatment allocation
+\(A\), continuous outcome \(Y\) and a single confounder \(X\) such that
+\(Z=(X,A,Y)^T\).
+
+\emph{click here to see the data generating process.}
+
+Here we use \[X \sim \mathcal{N}(0,1)\]
+\[A|X \sim \mathcal{B}\Big(\text{expit}(2X)\Big)\]
+\[\epsilon \sim \mathcal{N}(0,20)\]
+\[Y|X,\epsilon = \gamma_1^{0} X + \gamma_2^{0} A + \gamma_3^{0} AX + \epsilon\]
+with \(\gamma_1^{0}=4\), \(\gamma_2^{0}=3\), and \(\gamma_3^{0}=2\).
+
+NB: We use superscript \(^{0}\) to denote true values of the parameters.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gen\_obs\_dat }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, }\AttributeTok{seed=}\DecValTok{123}\NormalTok{)}
+\NormalTok{\{}
+\FunctionTok{set.seed}\NormalTok{(seed)}
+\NormalTok{X }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n) }\CommentTok{\# generate X}
+\NormalTok{A }\OtherTok{\textless{}{-}} \FunctionTok{rbinom}\NormalTok{(n, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ X)) )  }\CommentTok{\# generate treatment allocation A}
+\NormalTok{X\_mat }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(}\SpecialCharTok{\textasciitilde{}} \SpecialCharTok{{-}}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ X }\SpecialCharTok{+}\NormalTok{ A }\SpecialCharTok{+}\NormalTok{ A}\SpecialCharTok{:}\NormalTok{X) }\CommentTok{\# build the design matrix}
+\NormalTok{true\_gammas }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{) }
+\NormalTok{epsi }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n,}\DecValTok{0}\NormalTok{,}\DecValTok{20}\NormalTok{) }\CommentTok{\# generate gaussian noise }
+\NormalTok{Y }\OtherTok{\textless{}{-}}\NormalTok{ (X\_mat }\SpecialCharTok{\%*\%}\NormalTok{ true\_gammas) }\SpecialCharTok{+}\NormalTok{ epsi }\CommentTok{\# generate observed outcomes }
+\NormalTok{dat  }\OtherTok{\textless{}{-}}  \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{X=}\NormalTok{X, }\AttributeTok{A=}\NormalTok{A, }\AttributeTok{Y=}\NormalTok{Y) }\CommentTok{\# build a simulated dataset}
+\FunctionTok{return}\NormalTok{(dat)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat }\OtherTok{\textless{}{-}} \FunctionTok{gen\_obs\_dat}\NormalTok{(}\DecValTok{2000}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(dat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             X A          Y
+## 1 -0.56047565 0  -5.248052
+## 2 -0.23017749 1  -4.936208
+## 3  1.55870831 1 -16.611056
+## 4  0.07050839 0 -13.663658
+## 5  0.12928774 1  55.745531
+## 6  1.71506499 1  12.542090
+\end{verbatim}
+
+In this example, the goal is to calculate standard errors for the
+outcome regression average causal effect estimator
+\[\hat{\delta}=n^{-1}\sum_{i=1}^n\mathbb{\hat{E}}(Y|X=X_i, A=1)-\mathbb{\hat{E}}(Y|X=X_i, A=0).\]
+
+For \(\mathbb{E}(Y|X, A)\), let's specify the regression model
+\(m(X, A;\boldsymbol{\gamma})=\gamma_1X + \gamma_2A + \gamma_3AX\) and
+store the estimated parameters.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Y}\SpecialCharTok{\textasciitilde{}} \SpecialCharTok{{-}}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ X }\SpecialCharTok{+}\NormalTok{ A }\SpecialCharTok{+}\NormalTok{ A}\SpecialCharTok{:}\NormalTok{X, }\AttributeTok{data =}\NormalTok{ dat)}
+\NormalTok{gamma\_1\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(m)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{gamma\_2\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(m)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{gamma\_3\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(m)[}\DecValTok{3}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+Recall that the estimated parameters
+\(\hat{\boldsymbol{\gamma}}=(\hat{\gamma}_1,\hat{\gamma}_2,\hat{\gamma}_3)^T\)
+from this linear regression model jointly solve
+\[\sum_{i=1}^n (Y_i-\gamma_1X_i - \gamma_2A_i - \gamma_3A_iX_i)X_i=0,\]
+\[\sum_{i=1}^n (Y_i-\gamma_1X_i - \gamma_2A_i - \gamma_3A_iX_i)A_i=0,\]
+\[\sum_{i=1}^n (Y_i-\gamma_1X_i - \gamma_2A_i - \gamma_3A_iX_i)A_iX_i=0.\]
+Disregarding the summation sign, we can straightforwardly identify the
+three first elements of the estimating function \(\psi(z,\theta)\).
+Before building a list detailing the function \(\psi\), we need to
+identify the estimating function of our main parameter of interest
+\(\delta.\) To do so, recall that we can estimate \(\delta\) as
+\[\hat{\delta}=n^{-1}\sum_{i=1}^nm(X_i,1;\hat{\boldsymbol{\gamma}})-m(X_i,0;\hat{\boldsymbol{\gamma}}) \\
+=n^{-1}\sum_{i=1}^n\{\hat{\gamma}_1+ \hat{\gamma}_2 \times 1 +\hat{\gamma}_3 \times 1 \times X_i\} - 
+\{\hat{\gamma}_1+ \hat{\gamma}_2 \times 0 +\hat{\gamma}_3 \times 0 \times X_i\} \\
+=n^{-1}\sum_{i=1}^n \hat{\gamma}_2 +\hat{\gamma}_3 X_i.
+\] Let's first compute it.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{delta\_hat }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(gamma\_2\_hat }\SpecialCharTok{+}\NormalTok{ gamma\_3\_hat}\SpecialCharTok{*}\NormalTok{dat}\SpecialCharTok{$}\NormalTok{X)}
+\end{Highlighting}
+\end{Shaded}
+
+Note that rearranging the last equality we have
+\[\sum_{i=1}^n \hat{\gamma}_2 +\hat{\gamma}_3 X_i - \hat{\delta} = 0\]
+which straightforwardly yields the last element of the estimating
+function \(\psi(z,\theta)\). Disregarding the summation sign yields the
+last estimating function which we can now ``stack'' with the previous
+ones. Let's now build a list detailing the full function
+\(\psi(z,\theta)\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{psi\_1 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( (Y }\SpecialCharTok{{-}}\NormalTok{ gamma\_1}\SpecialCharTok{*}\NormalTok{X }\SpecialCharTok{{-}}\NormalTok{ gamma\_2}\SpecialCharTok{*}\NormalTok{A }\SpecialCharTok{{-}}\NormalTok{ gamma\_3}\SpecialCharTok{*}\NormalTok{A}\SpecialCharTok{*}\NormalTok{X) }\SpecialCharTok{*}\NormalTok{ X )}
+\NormalTok{psi\_2 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( (Y }\SpecialCharTok{{-}}\NormalTok{ gamma\_1}\SpecialCharTok{*}\NormalTok{X }\SpecialCharTok{{-}}\NormalTok{ gamma\_2}\SpecialCharTok{*}\NormalTok{A }\SpecialCharTok{{-}}\NormalTok{ gamma\_3}\SpecialCharTok{*}\NormalTok{A}\SpecialCharTok{*}\NormalTok{X) }\SpecialCharTok{*}\NormalTok{ A )}
+\NormalTok{psi\_3 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( (Y }\SpecialCharTok{{-}}\NormalTok{ gamma\_1}\SpecialCharTok{*}\NormalTok{X }\SpecialCharTok{{-}}\NormalTok{ gamma\_2}\SpecialCharTok{*}\NormalTok{A }\SpecialCharTok{{-}}\NormalTok{ gamma\_3}\SpecialCharTok{*}\NormalTok{A}\SpecialCharTok{*}\NormalTok{X) }\SpecialCharTok{*}\NormalTok{ A}\SpecialCharTok{*}\NormalTok{X )}
+\NormalTok{psi\_4 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( gamma\_2 }\SpecialCharTok{+}\NormalTok{ gamma\_3 }\SpecialCharTok{*}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ delta )}
+\NormalTok{psi }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(psi\_1, psi\_2, psi\_3, psi\_4)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's also store all the estimated parameters
+\(\hat{\theta}=(\hat{\gamma}_1,\hat{\gamma}_2,\hat{\gamma}_3,\hat{\delta})^T\)
+in a list.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{thetas\_hat }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{gamma\_1=}\NormalTok{gamma\_1\_hat,}
+                  \AttributeTok{gamma\_2=}\NormalTok{gamma\_2\_hat,}
+                  \AttributeTok{gamma\_3=}\NormalTok{gamma\_3\_hat,}
+                  \AttributeTok{delta=}\NormalTok{delta\_hat)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's pass the relevant arguments to \texttt{get\_vcov} and check
+results for the variance-covariance matrix.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res }\OtherTok{\textless{}{-}} \FunctionTok{get\_vcov}\NormalTok{(}\AttributeTok{data=}\NormalTok{dat, }\AttributeTok{thetas=}\NormalTok{thetas\_hat, }\AttributeTok{M=}\NormalTok{psi)}
+\NormalTok{res}\SpecialCharTok{$}\NormalTok{vcov}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##               gamma_1       gamma_2    gamma_3       delta
+## gamma_1  3.950134e-01  5.712563e-17 -0.3950134 -0.01238401
+## gamma_2  6.039613e-17  6.879971e-01 -0.4348004  0.67509646
+## gamma_3 -3.950134e-01 -4.348004e-01  1.0633310 -0.40258463
+## delta   -1.238401e-02  6.750965e-01 -0.4025846  0.66495308
+\end{verbatim}
+
+Let's see how the results compare with standard errors obtained from the
+bootstrap.
+
+\emph{click here to see the bootstrap procedure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{boot\_fun }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(d, }\AttributeTok{i=}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(d)) \{}
+\NormalTok{  z}\OtherTok{\textless{}{-}}\NormalTok{d[i,]}
+\NormalTok{  mod }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Y}\SpecialCharTok{\textasciitilde{}} \SpecialCharTok{{-}}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ X }\SpecialCharTok{+}\NormalTok{ A }\SpecialCharTok{+}\NormalTok{ A}\SpecialCharTok{:}\NormalTok{X, }\AttributeTok{data =}\NormalTok{ z)}
+\NormalTok{  gamma\_1\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(mod)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{  gamma\_2\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(mod)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{  gamma\_3\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(mod)[}\DecValTok{3}\NormalTok{]}
+\NormalTok{  delta\_hat }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(gamma\_2\_hat}\SpecialCharTok{*}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ gamma\_3\_hat}\SpecialCharTok{*}\DecValTok{1}\SpecialCharTok{*}\NormalTok{z}\SpecialCharTok{$}\NormalTok{X)}
+  \FunctionTok{return}\NormalTok{( }\FunctionTok{c}\NormalTok{(gamma\_1\_hat, gamma\_2\_hat, gamma\_3\_hat, delta\_hat) )}
+\NormalTok{\}}
+\NormalTok{boot\_start\_time }\OtherTok{\textless{}{-}} \FunctionTok{Sys.time}\NormalTok{()}
+\NormalTok{res\_boot }\OtherTok{\textless{}{-}}\NormalTok{ boot}\SpecialCharTok{::}\FunctionTok{boot}\NormalTok{(dat, boot\_fun, }\AttributeTok{R=}\DecValTok{9}\NormalTok{)}
+\NormalTok{boot\_end\_time }\OtherTok{\textless{}{-}} \FunctionTok{Sys.time}\NormalTok{()}
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Bootstrapping took"}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\FunctionTok{as.numeric}\NormalTok{(boot\_end\_time }\SpecialCharTok{{-}}\NormalTok{ boot\_start\_time), }\DecValTok{2}\NormalTok{), }\StringTok{"seconds."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Bootstrapping took 0.03 seconds."
+\end{verbatim}
+
+\begin{verbatim}
+##            [,1]       [,2]       [,3]       [,4]
+## [1,]  0.2862786 -0.0970282 -0.4405330 -0.0995642
+## [2,] -0.0970282  0.6209816 -0.3942569  0.5915470
+## [3,] -0.4405330 -0.3942569  1.4416591 -0.3547308
+## [4,] -0.0995642  0.5915470 -0.3547308  0.5655560
+\end{verbatim}
+
+This is pretty close to the results in \texttt{res\$vcov} that we
+obtained 0.9 times faster with \texttt{Mestim}.
+
+\hypertarget{example-3-value-estimation-for-dynamic-treatment-regime}{%
+\subsection{Example 3: Value estimation for dynamic treatment
+regime}\label{example-3-value-estimation-for-dynamic-treatment-regime}}
+
+Let's generate synthetic observational data for dynamic clinical
+decisions. We note \(S_t\) the observed state at time \(t\), \(A_t\) the
+binary action taken at time \(t\), and \(Y\) the terminal outcome for
+the sequence where higher values indicate worse disease symptoms. For
+illustrative purpose, we consider only \(T=2\) decision points so that
+we have data \(Z=(S_1,A_1,S_2,A_2,Y)^T.\)
+
+\emph{click here to see the data generating process.}
+
+The data are generated via the following hidden Markov process, where we
+only get to observe \(S_t\), which is a noisy version of the underlying
+state \(X_t\): \[X_1 \sim \mathcal{N}(0,0.1)\]
+\[X_{t+1}|X_t, A_t \sim \mathbf{1}_{X_t>0} \mathcal{N}(1.1X_t - 0.5A_t, 0.05) + \mathbf{1}_{X_t<0}X_t\]
+\[S_t|X_t \sim \mathcal{N}(X_t,0.1)\]
+\[A_1|S_1 \sim \mathcal{B}\Big(\text{expit}(-0.1+\log S_t)\Big)\]
+\[A_2|S_2,A_1 \sim \mathcal{B}\Big(\text{expit}(0.1+\log S_t + 3A_1)\Big)\]
+
+\[Y|X_3,A_2,A_1 \sim \text{exp}\Bigg(\mathcal{N}\Big(X_3 + \lambda(A_2+A_1),0.1\Big)\Bigg).\]
+We consider that receiving treatment actions has a side effect penalty
+of \(\lambda=0.1\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gen\_dtr\_dat }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, }\AttributeTok{seed=}\DecValTok{456}\NormalTok{)}
+\NormalTok{\{}
+\FunctionTok{set.seed}\NormalTok{(seed)}
+\NormalTok{expit }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) }\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{x))}
+
+\NormalTok{X\_1 }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{sd=}\NormalTok{.}\DecValTok{1}\NormalTok{)}
+\NormalTok{S\_1 }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{mean =}\NormalTok{ X\_1, }\AttributeTok{sd =}\NormalTok{ .}\DecValTok{1}\NormalTok{))}
+\NormalTok{A\_1 }\OtherTok{\textless{}{-}} \FunctionTok{rbinom}\NormalTok{(n, }\AttributeTok{size =} \DecValTok{1}\NormalTok{, }\AttributeTok{prob =} \FunctionTok{expit}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{.}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{log}\NormalTok{(S\_1)))}
+
+\NormalTok{X\_2 }\OtherTok{\textless{}{-}}\NormalTok{ (X\_1}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{mean =} \FloatTok{1.1}\SpecialCharTok{*}\NormalTok{X\_1 }\SpecialCharTok{{-}}\NormalTok{ .}\DecValTok{5} \SpecialCharTok{*}\NormalTok{ A\_1, }\AttributeTok{sd=}\NormalTok{.}\DecValTok{05}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ (X\_1}\SpecialCharTok{\textless{}}\DecValTok{0}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ X\_1}
+\NormalTok{S\_2 }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{mean =}\NormalTok{ X\_2, }\AttributeTok{sd =}\NormalTok{ .}\DecValTok{1}\NormalTok{))}
+\NormalTok{A\_2 }\OtherTok{\textless{}{-}} \FunctionTok{rbinom}\NormalTok{(n, }\AttributeTok{size =} \DecValTok{1}\NormalTok{, }\AttributeTok{prob =} \FunctionTok{expit}\NormalTok{(.}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{log}\NormalTok{(S\_2)}\SpecialCharTok{+}\DecValTok{3}\SpecialCharTok{*}\NormalTok{A\_1))}
+
+\NormalTok{X\_3 }\OtherTok{\textless{}{-}}\NormalTok{ (X\_2}\SpecialCharTok{\textgreater{}}\DecValTok{0}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{mean =} \FloatTok{1.1}\SpecialCharTok{*}\NormalTok{X\_2 }\SpecialCharTok{{-}}\NormalTok{ .}\DecValTok{5} \SpecialCharTok{*}\NormalTok{ A\_2, }\AttributeTok{sd=}\NormalTok{.}\DecValTok{05}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ (X\_2}\SpecialCharTok{\textless{}}\DecValTok{0}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ X\_2}
+\NormalTok{Y }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{mean =}\NormalTok{ X\_3 }\SpecialCharTok{+}\NormalTok{ .}\DecValTok{1}\SpecialCharTok{*}\NormalTok{(A\_1 }\SpecialCharTok{+}\NormalTok{ A\_2), }\AttributeTok{sd =}\NormalTok{ .}\DecValTok{1}\NormalTok{)) }\CommentTok{\#0.1 penalty for treating}
+
+\NormalTok{dat }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{S\_1=}\NormalTok{S\_1, }\AttributeTok{A\_1=}\NormalTok{A\_1, }\AttributeTok{S\_2=}\NormalTok{S\_2, }\AttributeTok{A\_2=}\NormalTok{A\_2, Y)  }
+\FunctionTok{return}\NormalTok{(dat)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat }\OtherTok{\textless{}{-}} \FunctionTok{gen\_dtr\_dat}\NormalTok{(}\DecValTok{10000}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(dat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         S_1 A_1       S_2 A_2         Y
+## 1 0.9483774   0 0.8531794   1 0.9789192
+## 2 0.9854905   1 0.6989019   1 0.8782489
+## 3 1.1105378   1 0.7566110   1 0.8014279
+## 4 0.8156413   0 0.9575166   1 0.9136672
+## 5 0.8191443   0 0.9693241   0 0.8453340
+## 6 1.0009509   0 1.1241258   1 0.9894468
+\end{verbatim}
+
+Given any treatment action regime \(d=\{d_1,\ldots, d_T\}^T\), an
+estimator for \(\mathbb{E}_{Z\sim d}(Y)\) is \begin{equation}
+\label{eq:1}
+\hat{\mathcal{V}}_{IPW}(d)=n^{-1}\sum_{i=1}^nY_i\prod_{t=1}^T\frac{\mathbf{1}\big({d_t(S_{t,i})=A_{t,i}}\big)}{\hat{e}_t\Big(S_{t,i},A_{t-1,i},S_{t-1,i}, \ldots,S_{1,i}\Big)^{d_t(S_{t,i})}\bigg\{1-\hat{e}_t\Big(S_{t,i},A_{t-1,i},S_{t-1,i}, \ldots,S_{1,i}\Big)\bigg\}^{1-d_t(S_{t,i})} }
+\end{equation}
+
+where we write the relevant generalization of the propensity score as
+\(e_t\Big(S_{t},A_{t-1},S_{t-1}, \ldots,S_{1}\Big)=\mathbb{E}\Big(A_{t}|S_{t},A_{t-1},S_{t-1}, \ldots,S_{1}\Big).\)
+
+In this example we consider the regime
+\(\tilde{d}=\{\tilde{d}_1(S_1)=\mathbf{1}_{S_1>1},\tilde{d}_2(S_2)=\mathbf{1}_{S_2>1}\}\).
+The goal is to calculate standard errors for
+\(\hat{\mathcal{V}}_{IPW}(\tilde{d})\). As \(T=2\), we need specify
+models for \(e_1(S_1)\) and \(e_2(S_2,A_1,S_1)\). Let's specify the
+parametric regression models
+\[e_1(S_1;\boldsymbol{\delta})=\text{expit}\big(\delta_1+\delta_2\log S_1)\]
+and
+\[e_2(S_2,A_1,S_1;\boldsymbol{\phi})=\text{expit}\big(\phi_1+\phi_2\log S_2 +\phi_3A_1).\]
+We fit and store the estimated parameters as follows.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{e\_1 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(A\_1}\SpecialCharTok{\textasciitilde{}}\FunctionTok{I}\NormalTok{(}\FunctionTok{log}\NormalTok{(S\_1)), }\AttributeTok{data=}\NormalTok{dat, }\AttributeTok{family =} \StringTok{"binomial"}\NormalTok{)}
+\NormalTok{delta\_1\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_1)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{delta\_2\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_1)[}\DecValTok{2}\NormalTok{]}
+
+\NormalTok{e\_2 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(A\_2}\SpecialCharTok{\textasciitilde{}}\FunctionTok{I}\NormalTok{(}\FunctionTok{log}\NormalTok{(S\_2)) }\SpecialCharTok{+}\NormalTok{ A\_1 , }\AttributeTok{data=}\NormalTok{dat, }\AttributeTok{family =} \StringTok{"binomial"}\NormalTok{)}
+\NormalTok{phi\_1\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_2)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{phi\_2\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_2)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{phi\_3\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_2)[}\DecValTok{3}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+As in example 1, recall that for \(e_1\) the estimated parameters
+\(\hat{\boldsymbol{\delta}}=(\hat{\delta}_1, \hat{\delta}_2)^T\) jointly
+solve
+\[\sum_{i=1}^{n}\Big[1+\exp\big\{-{(\delta_1+\delta_2 \log S_{1,i})\big\}\Big]^{-1}}-A_{1,i} =0,\]
+\[\sum_{i=1}^{n}\bigg(\Big[1+\exp\big\{-{(\delta_1+\delta_2 \log S_{1,i})\big\}\Big]^{-1}}-A_{1,i}\bigg) \log S_{1,i}=0.\]
+Similarly for \(e_2\) the estimated parameters
+\(\hat{\boldsymbol{\phi}}=(\hat{\phi}_1, \hat{\phi}_2, \hat{\phi}_3)^T\)
+jointly solve
+\[\sum_{i=1}^{n}\Big[1+\exp\big\{-{(\phi_1+\phi_2 \log S_{2,i}+\phi_3 A_{1,i})\big\}\Big]^{-1}}-A_{2,i} =0,\]
+\[\sum_{i=1}^{n}\bigg(\Big[1+\exp\big\{-{(\phi_1+\phi_2 \log S_{2,i}+\phi_3 A_{1,i})\big\}\Big]^{-1}}-A_{2,i}\bigg) \log S_{2,i}=0,\]
+\[\sum_{i=1}^{n}\bigg(\Big[1+\exp\big\{-{(\phi_1+\phi_2 \log S_{2,i}+\phi_3 A_{1,i})\big\}\Big]^{-1}}-A_{2,i}\bigg) A_{1,i}=0.\]
+
+Disregarding the summation sign, we can straightforwardly identify the
+five first elements of the estimating function \(\psi(z,\theta)\). Let's
+store them before building our final list for \(\psi\).
+
+Note that for programming convenience, we recommend to store all
+relevant variable transformations as columns in the original dataframe.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat}\SpecialCharTok{$}\NormalTok{log\_S\_1 }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{S\_1) ; dat}\SpecialCharTok{$}\NormalTok{log\_S\_2 }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{S\_2) }\CommentTok{\# For ease of programming}
+
+\NormalTok{psi\_1 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( ((}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(delta\_1 }\SpecialCharTok{+}\NormalTok{ delta\_2 }\SpecialCharTok{*}\NormalTok{ log\_S\_1)))) }\SpecialCharTok{{-}}\NormalTok{ A\_1) }\SpecialCharTok{*} \DecValTok{1}\NormalTok{ )}
+\NormalTok{psi\_2 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( ((}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(delta\_1 }\SpecialCharTok{+}\NormalTok{ delta\_2 }\SpecialCharTok{*}\NormalTok{ log\_S\_1)))) }\SpecialCharTok{{-}}\NormalTok{ A\_1) }\SpecialCharTok{*}\NormalTok{ log\_S\_1)}
+
+\NormalTok{psi\_3 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( ((}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(phi\_1 }\SpecialCharTok{+}\NormalTok{ phi\_2 }\SpecialCharTok{*}\NormalTok{ log\_S\_2 }\SpecialCharTok{+}\NormalTok{ phi\_3 }\SpecialCharTok{*}\NormalTok{ A\_1)))) }\SpecialCharTok{{-}}\NormalTok{ A\_2) }\SpecialCharTok{*} \DecValTok{1}\NormalTok{ )}
+\NormalTok{psi\_4 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( ((}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(phi\_1 }\SpecialCharTok{+}\NormalTok{ phi\_2 }\SpecialCharTok{*}\NormalTok{ log\_S\_2 }\SpecialCharTok{+}\NormalTok{ phi\_3 }\SpecialCharTok{*}\NormalTok{ A\_1)))) }\SpecialCharTok{{-}}\NormalTok{ A\_2) }\SpecialCharTok{*}\NormalTok{ log\_S\_2)}
+\NormalTok{psi\_5 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( ((}\DecValTok{1}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(phi\_1 }\SpecialCharTok{+}\NormalTok{ phi\_2 }\SpecialCharTok{*}\NormalTok{ log\_S\_2 }\SpecialCharTok{+}\NormalTok{ phi\_3 }\SpecialCharTok{*}\NormalTok{ A\_1)))) }\SpecialCharTok{{-}}\NormalTok{ A\_2) }\SpecialCharTok{*}\NormalTok{ A\_1)}
+\end{Highlighting}
+\end{Shaded}
+
+To obtain the last element of \(\psi\), we need to do algebraic
+manipulations. Denoting
+\(\mathcal{C_i}=\prod_{t=1}^2\mathbf{1}\big({\tilde{d}_t(S_{t,i})=A_{t,i}}\big)\)
+for simplicity, after substitution for
+\(\hat{e}_1(S_1;\boldsymbol{\hat{\delta}})\) and
+\(\hat{e}_2(S_2,A_1,S_1;\boldsymbol{\hat{\phi}})\), equation \ref{eq:1}
+yields \begin{equation}
+\hat{\mathcal{V}}_{IPW}(\tilde{d})=\\
+n^{-1}\sum_{i=1}^nY_i\mathcal{C_i} 
+\frac{\Big[1+\exp\big\{-(\delta_1+\delta_2 \log S_{1,i})\big\}\Big]^{\tilde{d}_1(S_{1,i})} \Big[1+\exp\big\{-(\phi_1+\phi_2 \log S_{2,i}+\phi_3 A_{1,i})\big\}\Big]^{\tilde{d}_2(S_{2,i})}}
+{\bigg(1-\Big[1+\exp\big\{-(\delta_1+\delta_2 \log S_{1,i})\big\}\Big]^{-1}\bigg)^{1-\tilde{d}_1(S_{1,i})}\bigg(1-\Big[1+\exp\big\{-(\phi_1+\phi_2 \log S_{2,i}+\phi_3 A_{1,i})\big\}\Big]^{-1}\bigg)^{1-\tilde{d}_2(S_{2,i})}}.
+\end{equation}
+
+Rearrangements of the equation above yield \begin{equation}
+\sum_{i=1}^nY_i\mathcal{C_i}
+\frac{\Big[1+\exp\big\{-(\delta_1+\delta_2 \log S_{1,i})\big\}\Big]^{\tilde{d}_1(S_{1,i})} \Big[1+\exp\big\{-(\phi_1+\phi_2 \log S_{2,i}+\phi_3 A_{1,i})\big\}\Big]^{\tilde{d}_2(S_{2,i})}}
+{\bigg(1-\Big[1+\exp\big\{-(\delta_1+\delta_2 \log S_{1,i})\big\}\Big]^{-1}\bigg)^{1-\tilde{d}_1(S_{1,i})}\bigg(1-\Big[1+\exp\big\{-(\phi_1+\phi_2 \log S_{2,i}+\phi_3 A_{1,i})\big\}\Big]^{-1}\bigg)^{1-\tilde{d}_2(S_{2,i})}} \\
+-\hat{\mathcal{V}}_{IPW}(\tilde{d})=0.
+\end{equation} We can now straightforwardly identify and store the last
+elements of the estimating function \(\psi\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# The regime we are interested in}
+\NormalTok{dat}\SpecialCharTok{$}\NormalTok{d\_1 }\OtherTok{\textless{}{-}}\NormalTok{ dat}\SpecialCharTok{$}\NormalTok{S\_1}\SpecialCharTok{\textgreater{}}\DecValTok{1}
+\NormalTok{dat}\SpecialCharTok{$}\NormalTok{d\_2 }\OtherTok{\textless{}{-}}\NormalTok{ dat}\SpecialCharTok{$}\NormalTok{S\_2}\SpecialCharTok{\textgreater{}}\DecValTok{1}
+
+\CommentTok{\# For ease of programming}
+\NormalTok{dat}\SpecialCharTok{$}\NormalTok{C\_d }\OtherTok{\textless{}{-}} \FunctionTok{with}\NormalTok{(dat, d\_1}\SpecialCharTok{==}\NormalTok{A\_1 }\SpecialCharTok{\&}\NormalTok{ d\_2}\SpecialCharTok{==}\NormalTok{A\_2)}
+
+\CommentTok{\# Store the last element of psi}
+\NormalTok{psi\_6 }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( Y }\SpecialCharTok{*}\NormalTok{ C\_d }\SpecialCharTok{*}
+\NormalTok{          (  (}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(delta\_1 }\SpecialCharTok{+}\NormalTok{ delta\_2 }\SpecialCharTok{*}\NormalTok{ log\_S\_1)))}\SpecialCharTok{\^{}}\NormalTok{d\_1 }\SpecialCharTok{*} \CommentTok{\# numerator}
+\NormalTok{             (}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(phi\_1 }\SpecialCharTok{+}\NormalTok{ phi\_2 }\SpecialCharTok{*}\NormalTok{ log\_S\_2 }\SpecialCharTok{+}\NormalTok{ phi\_3 }\SpecialCharTok{*}\NormalTok{ A\_1)))}\SpecialCharTok{\^{}}\NormalTok{d\_2  ) }
+          
+      \SpecialCharTok{/}\NormalTok{   (  (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(delta\_1 }\SpecialCharTok{+}\NormalTok{ delta\_2 }\SpecialCharTok{*}\NormalTok{ log\_S\_1)))}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{d\_1) }\SpecialCharTok{*} \CommentTok{\# denominator}
+\NormalTok{             (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(phi\_1 }\SpecialCharTok{+}\NormalTok{ phi\_2 }\SpecialCharTok{*}\NormalTok{ log\_S\_2 }\SpecialCharTok{+}\NormalTok{ phi\_3 }\SpecialCharTok{*}\NormalTok{ A\_1)))}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{d\_2)  ) }
+\SpecialCharTok{{-}}\NormalTok{ V}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's now build a list detailing the full function \(\psi(z,\theta)\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{psi }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(psi\_1, psi\_2, psi\_3, psi\_4, psi\_5, psi\_6)}
+\end{Highlighting}
+\end{Shaded}
+
+Now, let's compute \(\hat{\mathcal{V}}_{IPW}(\tilde{d})\) and stack it
+in a list of all the estimated parameters
+\(\hat{\theta}=\Big(\hat{\delta}_1,\hat{\delta}_2,\hat{\phi}_1,\hat{\phi}_2,\hat{\phi}_3, \hat{\mathcal{V}}_{IPW}(\tilde{d})\Big)^T\).
+
+For simplicity in computing \(\hat{\mathcal{V}}_{IPW}(\tilde{d})\), we
+recommend to use a slightly modified version of \texttt{psi\_6} as
+follows.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Just delete "{-} V" from in the previous expression}
+\CommentTok{\# add \_hat as appropriate}
+\NormalTok{ipw\_estimator }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( Y }\SpecialCharTok{*}\NormalTok{ C\_d }\SpecialCharTok{*}
+\NormalTok{          (  (}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(delta\_1\_hat }\SpecialCharTok{+}\NormalTok{ delta\_2\_hat }\SpecialCharTok{*}\NormalTok{ log\_S\_1)))}\SpecialCharTok{\^{}}\NormalTok{d\_1 }\SpecialCharTok{*} \CommentTok{\# numerator}
+\NormalTok{             (}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(phi\_1\_hat }\SpecialCharTok{+}\NormalTok{ phi\_2\_hat }\SpecialCharTok{*}\NormalTok{ log\_S\_2 }\SpecialCharTok{+}\NormalTok{ phi\_3\_hat }\SpecialCharTok{*}\NormalTok{ A\_1)))}\SpecialCharTok{\^{}}\NormalTok{d\_2  ) }
+          
+      \SpecialCharTok{/}\NormalTok{   (  (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(delta\_1\_hat }\SpecialCharTok{+}\NormalTok{ delta\_2\_hat }\SpecialCharTok{*}\NormalTok{ log\_S\_1)))}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{d\_1) }\SpecialCharTok{*} \CommentTok{\# denominator}
+\NormalTok{             (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(phi\_1\_hat }\SpecialCharTok{+}\NormalTok{ phi\_2\_hat }\SpecialCharTok{*}\NormalTok{ log\_S\_2 }\SpecialCharTok{+}\NormalTok{ phi\_3\_hat }\SpecialCharTok{*}\NormalTok{ A\_1)))}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{d\_2)  )  }
+\NormalTok{)}
+
+\CommentTok{\# Compute individual contribution and take the average}
+\NormalTok{V\_hat }\OtherTok{\textless{}{-}} \FunctionTok{with}\NormalTok{(dat, }\FunctionTok{mean}\NormalTok{(}\FunctionTok{eval}\NormalTok{(ipw\_estimator))) }\CommentTok{\# Other ways to compute this quantity are OK too.}
+
+\NormalTok{thetas\_hat }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{delta\_1=}\NormalTok{delta\_1\_hat,}
+                   \AttributeTok{delta\_2=}\NormalTok{delta\_2\_hat,}
+                   \AttributeTok{phi\_1=}\NormalTok{phi\_1\_hat,}
+                   \AttributeTok{phi\_2=}\NormalTok{phi\_2\_hat,}
+                   \AttributeTok{phi\_3=}\NormalTok{phi\_3\_hat,}
+                   \AttributeTok{V=}\NormalTok{V\_hat)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's pass the relevant arguments to \texttt{get\_vcov} and check
+results for the standard errors.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res }\OtherTok{\textless{}{-}} \FunctionTok{get\_vcov}\NormalTok{(}\AttributeTok{data=}\NormalTok{dat, }\AttributeTok{thetas=}\NormalTok{thetas\_hat, }\AttributeTok{M=}\NormalTok{psi)}
+\NormalTok{res}\SpecialCharTok{$}\NormalTok{se}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    delta_1    delta_2      phi_1      phi_2      phi_3          V 
+## 0.02007619 0.14202218 0.02784446 0.15906802 0.08292939 0.02369241
+\end{verbatim}
+
+Let's see how the results compare with standard errors obtained from the
+bootstrap.
+
+\emph{click here to see the bootstrap procedure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{boot\_fun }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(d, }\AttributeTok{i=}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(d)) \{}
+\NormalTok{  z}\OtherTok{\textless{}{-}}\NormalTok{d[i,]}
+\NormalTok{  e\_1 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(A\_1}\SpecialCharTok{\textasciitilde{}}\FunctionTok{I}\NormalTok{(}\FunctionTok{log}\NormalTok{(S\_1)), }\AttributeTok{data=}\NormalTok{z, }\AttributeTok{family =} \StringTok{"binomial"}\NormalTok{)}
+\NormalTok{  e\_2 }\OtherTok{\textless{}{-}} \FunctionTok{glm}\NormalTok{(A\_2}\SpecialCharTok{\textasciitilde{}}\FunctionTok{I}\NormalTok{(}\FunctionTok{log}\NormalTok{(S\_2)) }\SpecialCharTok{+}\NormalTok{ A\_1 , }\AttributeTok{data=}\NormalTok{z, }\AttributeTok{family =} \StringTok{"binomial"}\NormalTok{)}
+
+\NormalTok{  delta\_1\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_1)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{  delta\_2\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_1)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{  phi\_1\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_2)[}\DecValTok{1}\NormalTok{]}
+\NormalTok{  phi\_2\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_2)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{  phi\_3\_hat }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(e\_2)[}\DecValTok{3}\NormalTok{]}
+
+\NormalTok{  ipw\_estimator }\OtherTok{\textless{}{-}} \FunctionTok{expression}\NormalTok{( z}\SpecialCharTok{$}\NormalTok{Y }\SpecialCharTok{*}\NormalTok{ z}\SpecialCharTok{$}\NormalTok{C\_d }\SpecialCharTok{*}
+\NormalTok{            (  (}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(delta\_1\_hat }\SpecialCharTok{+}\NormalTok{ delta\_2\_hat }\SpecialCharTok{*}\NormalTok{ z}\SpecialCharTok{$}\NormalTok{log\_S\_1)))}\SpecialCharTok{\^{}}\NormalTok{z}\SpecialCharTok{$}\NormalTok{d\_1 }\SpecialCharTok{*} \CommentTok{\# numerator}
+\NormalTok{               (}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(phi\_1\_hat }\SpecialCharTok{+}\NormalTok{ phi\_2\_hat }\SpecialCharTok{*}\NormalTok{ z}\SpecialCharTok{$}\NormalTok{log\_S\_2 }\SpecialCharTok{+}\NormalTok{ phi\_3\_hat }\SpecialCharTok{*}\NormalTok{ z}\SpecialCharTok{$}\NormalTok{A\_1)))}\SpecialCharTok{\^{}}\NormalTok{z}\SpecialCharTok{$}\NormalTok{d\_2  ) }
+            
+        \SpecialCharTok{/}\NormalTok{   (  (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(delta\_1\_hat }\SpecialCharTok{+}\NormalTok{ delta\_2\_hat }\SpecialCharTok{*}\NormalTok{ z}\SpecialCharTok{$}\NormalTok{log\_S\_1)))}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{z}\SpecialCharTok{$}\NormalTok{d\_1) }\SpecialCharTok{*} \CommentTok{\# denominator}
+\NormalTok{               (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(phi\_1\_hat }\SpecialCharTok{+}\NormalTok{ phi\_2\_hat }\SpecialCharTok{*}\NormalTok{ z}\SpecialCharTok{$}\NormalTok{log\_S\_2 }\SpecialCharTok{+}\NormalTok{ phi\_3\_hat }\SpecialCharTok{*}\NormalTok{ z}\SpecialCharTok{$}\NormalTok{A\_1)))}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{))}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{z}\SpecialCharTok{$}\NormalTok{d\_2)  )  }
+\NormalTok{  )}
+
+\NormalTok{  V\_hat }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(}\FunctionTok{eval}\NormalTok{(ipw\_estimator))}
+  \FunctionTok{return}\NormalTok{( }\FunctionTok{c}\NormalTok{(delta\_1\_hat, delta\_2\_hat, phi\_1\_hat, phi\_2\_hat, phi\_3\_hat, V\_hat) )}
+\NormalTok{\}}
+\NormalTok{boot\_start\_time }\OtherTok{\textless{}{-}} \FunctionTok{Sys.time}\NormalTok{()}
+\NormalTok{res\_boot }\OtherTok{\textless{}{-}}\NormalTok{ boot}\SpecialCharTok{::}\FunctionTok{boot}\NormalTok{(dat, boot\_fun, }\AttributeTok{R=}\DecValTok{9}\NormalTok{)}
+\NormalTok{boot\_end\_time }\OtherTok{\textless{}{-}} \FunctionTok{Sys.time}\NormalTok{()}
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Bootstrapping took"}\NormalTok{, }\FunctionTok{round}\NormalTok{(}\FunctionTok{as.numeric}\NormalTok{(boot\_end\_time }\SpecialCharTok{{-}}\NormalTok{ boot\_start\_time), }\DecValTok{2}\NormalTok{), }\StringTok{"seconds."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Bootstrapping took 0.46 seconds."
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## ORDINARY NONPARAMETRIC BOOTSTRAP
+## 
+## 
+## Call:
+## boot::boot(data = dat, statistic = boot_fun, R = 9)
+## 
+## 
+## Bootstrap Statistics :
+##        original        bias    std. error
+## t1* -0.08846046 -2.163801e-03  0.02284611
+## t2*  1.04094740  2.289716e-02  0.13200214
+## t3*  0.14597282  1.391273e-05  0.02765841
+## t4*  1.06264167 -1.378865e-01  0.18640433
+## t5*  2.93828421 -4.121071e-02  0.08724680
+## t6*  0.90198316 -1.770405e-02  0.02117803
+\end{verbatim}
+
+This is pretty close to the results in \texttt{res\$se} that we obtained
+2.1 times faster with \texttt{Mestim}.
+
+\hypertarget{references}{%
+\subsection{References}\label{references}}
+
+Boos, D. D. and Stefanski, L. (2013). \emph{Essential Statistical
+Inference}. Springer, New York.
+\url{https://doi.org/10.1007/978-1-4614-4818-1}.
+
+Tsiatis, A. A., Davidian, M., Holloway, S. T. \& Laber, E. B. (2019),
+\emph{Dynamic Treatment Regimes: Statistical Methods for Precision
+Medicine}, CRC Press. \url{https://doi.org/10.1201/9780429192692}.
+
+\end{document}
