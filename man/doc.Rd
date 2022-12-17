@@ -38,6 +38,7 @@ Tsiatis, A. A., Davidian, M., Holloway, S. T. and Laber, E. B (2019)
 ####
 ## Simulate data
 ####
+set.seed(123)
 n <- 10000 # number of simulated iid observations
 x_1 <- rnorm(n); x_2 <- rnorm(n) # generate x_1 and x_2
 true_thetas <- c(2,3) # generate true parameters
