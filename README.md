@@ -34,6 +34,6 @@ This package is written and maintained by François Grolleau (francois.grolleau@
 
 ### References
 - Boos DD. and Stefanski, LA.
-<b>Essential Statistical Inference.</b> 2013.[<a href="https://doi.org/10.1007/978-1-4614-4818-1"> Springer </a>]
+<b>Essential Statistical Inference.</b> 2013. [<a href="https://doi.org/10.1007/978-1-4614-4818-1">Springer</a>]
 - Tsiatis, AA., Davidian, M., Holloway, ST. and Laber, EB.
 <b>Dynamic Treatment Regimes: Statistical Methods for Precision Medicine.</b> 2019. [<a href="https://doi.org/10.1201/9780429192692">CRC Press</a>]
