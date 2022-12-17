@@ -1,13 +1,11 @@
 # Mestim
 
 <!-- badges: start -->
-[![PyPI Latest Release](https://img.shields.io/pypi/v/speedboot.svg)](https://pypi.org/project/speedboot/)
-
 [![R-CMD-check](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/Mestim)](https://cran.r-project.org/package=Mestim)
-[![license](https://img.shields.io/badge/license-MIT-blue)]
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/Mestim)](https://cran.r-project.org/package=Mestim)](https://www.r-pkg.org/badges/version/Mestim)](https://cran.r-project.org/package=Mestim)
+[![license](https://img.shields.io/badge/license-MIT-blue)](https://img.shields.io/badge/license-MIT-blue)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![R badge](https://img.shields.io/badge/Build%20with-♥%20and%20R-blue)]
+[![R badge](https://img.shields.io/badge/Build%20with-♥%20and%20R-blue)](https://img.shields.io/badge/Build%20with-♥%20and%20R-blue)
 <!-- badges: end -->
 
 This package provides a flexible framework for estimating the variance-covariance matrix of estimated parameters.
