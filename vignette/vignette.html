@@ -301,15 +301,15 @@ return(dat)
 }</code></pre>
 </details>
 <p><br></p>
-<pre class="r"><code>dat &lt;- gen_lr_dat(2000)
+<pre class="r"><code>dat &lt;- gen_lr_dat(5000)
 head(dat)</code></pre>
-<pre><code>##           X_1        X_2 Y
-## 1 -0.56047565 -1.5348112 0
-## 2 -0.23017749  0.7108136 1
-## 3  1.55870831 -1.6247675 0
-## 4  0.07050839  3.6576829 1
-## 5  0.12928774  0.5224076 1
-## 6  1.71506499 -1.8458049 0</code></pre>
+<pre><code>##           X_1       X_2 Y
+## 1 -0.56047565 -1.482522 0
+## 2 -0.23017749  3.382780 1
+## 3  1.55870831 -3.440849 0
+## 4  0.07050839  4.443056 1
+## 5  0.12928774  2.748574 1
+## 6  1.71506499  1.005393 1</code></pre>
 <p>Let’s fit a logistic regression model and put the estimated parameters in a list.</p>
 <pre class="r"><code>mod &lt;- glm(Y~-1 + X_1 + X_2, data=dat, family = &quot;binomial&quot;)
 thetas_hat &lt;- list(thetas_1=coef(mod)[1], thetas_2=coef(mod)[2])</code></pre>
@@ -331,25 +331,25 @@ psi &lt;- list(psi_1, psi_2)</code></pre>
 res &lt;- get_vcov(data=dat, thetas=thetas_hat, M=psi)</code></pre>
 <p>You can obtain the variance-covariance matrix from a <code>get_vcov</code> result as follows</p>
 <pre class="r"><code>res$vcov</code></pre>
-<pre><code>##           thetas_1  thetas_2
-## thetas_1 0.1769649 0.2118127
-## thetas_2 0.2118127 0.2815411</code></pre>
+<pre><code>##            thetas_1   thetas_2
+## thetas_1 0.05239025 0.05366863
+## thetas_2 0.05366863 0.06795271</code></pre>
 <details>
 <summary>
 <em>click here to verify that the variance-covariance matrix from <code>get_vcov</code> is similar to that of <code>glm</code>.</em>
 </summary>
 <p><br></p>
 <pre class="r"><code>vcov(mod)</code></pre>
-<pre><code>##           X_1       X_2
-## X_1 0.1420069 0.1582269
-## X_2 0.1582269 0.2111057</code></pre>
+<pre><code>##            X_1        X_2
+## X_1 0.05698408 0.06143937
+## X_2 0.06143937 0.07963092</code></pre>
 This is indeed very close the results in<code>res$vcov</code>.
 </details>
 <p><br>
 Asymptotic standard errors are square root of the diagonal elements from the estimated variance-covariance matrix. These are stored in the <code>se</code> attribute.</p>
 <pre class="r"><code>res$se</code></pre>
 <pre><code>##  thetas_1  thetas_2 
-## 0.4206720 0.5306045</code></pre>
+## 0.2288892 0.2606774</code></pre>
 </div>
 <div id="example-2-average-treatment-effect-via-outcome-regression" class="section level2">
 <h2>Example 2: Average treatment effect via outcome regression</h2>
@@ -380,15 +380,15 @@ return(dat)
 }</code></pre>
 </details>
 <p><br></p>
-<pre class="r"><code>dat &lt;- gen_obs_dat(2000)
+<pre class="r"><code>dat &lt;- gen_obs_dat(5000)
 head(dat)</code></pre>
 <pre><code>##             X A          Y
-## 1 -0.56047565 0  -5.248052
-## 2 -0.23017749 1  -4.936208
-## 3  1.55870831 1 -16.611056
-## 4  0.07050839 0 -13.663658
-## 5  0.12928774 1  55.745531
-## 6  1.71506499 1  12.542090</code></pre>
+## 1 -0.56047565 0   4.758148
+## 2 -0.23017749 0  15.368124
+## 3  1.55870831 1   2.018927
+## 4  0.07050839 1 -50.422238
+## 5  0.12928774 1 -18.163366
+## 6  1.71506499 1 -11.819112</code></pre>
 <p>In this example, the goal is to calculate standard errors for the outcome regression average causal effect estimator
 <span class="math display">\[\hat{\delta}=n^{-1}\sum_{i=1}^n\mathbb{\hat{E}}(Y|X=X_i, A=1)-\mathbb{\hat{E}}(Y|X=X_i, A=0).\]</span></p>
 <p>For <span class="math inline">\(\mathbb{E}(Y|X, A)\)</span>, let’s specify the regression model <span class="math inline">\(m(X, A;\boldsymbol{\gamma})=\gamma_1X + \gamma_2A + \gamma_3AX\)</span> and store the estimated parameters.</p>
@@ -427,11 +427,11 @@ psi &lt;- list(psi_1, psi_2, psi_3, psi_4)</code></pre>
 <p>Let’s pass the relevant arguments to <code>get_vcov</code> and check results for the variance-covariance matrix.</p>
 <pre class="r"><code>res &lt;- get_vcov(data=dat, thetas=thetas_hat, M=psi)
 res$vcov</code></pre>
-<pre><code>##               gamma_1       gamma_2    gamma_3       delta
-## gamma_1  3.950134e-01  5.712563e-17 -0.3950134 -0.01238401
-## gamma_2  6.039613e-17  6.879971e-01 -0.4348004  0.67509646
-## gamma_3 -3.950134e-01 -4.348004e-01  1.0633310 -0.40258463
-## delta   -1.238401e-02  6.750965e-01 -0.4025846  0.66495308</code></pre>
+<pre><code>##               gamma_1       gamma_2    gamma_3         delta
+## gamma_1  1.686258e-01 -5.116353e-17 -0.1686258  2.291608e-05
+## gamma_2 -4.167777e-17  2.510135e-01 -0.1497095  2.509786e-01
+## gamma_3 -1.686258e-01 -1.497095e-01  0.4228791 -1.496732e-01
+## delta    2.291608e-05  2.509786e-01 -0.1496732  2.512757e-01</code></pre>
 Let’s see how the results compare with standard errors obtained from the bootstrap.
 <details>
 <summary>
@@ -448,17 +448,17 @@ Let’s see how the results compare with standard errors obtained from the boots
   return( c(gamma_1_hat, gamma_2_hat, gamma_3_hat, delta_hat) )
 }
 boot_start_time &lt;- Sys.time()
-res_boot &lt;- boot::boot(dat, boot_fun, R=9)
+res_boot &lt;- boot::boot(dat, boot_fun, R=999)
 boot_end_time &lt;- Sys.time()
 paste(&quot;Bootstrapping took&quot;, round(as.numeric(boot_end_time - boot_start_time), 2), &quot;seconds.&quot;)</code></pre>
-<pre><code>## [1] &quot;Bootstrapping took 0.03 seconds.&quot;</code></pre>
+<pre><code>## [1] &quot;Bootstrapping took 3.9 seconds.&quot;</code></pre>
 </details>
-<pre><code>##            [,1]       [,2]       [,3]       [,4]
-## [1,]  0.2862786 -0.0970282 -0.4405330 -0.0995642
-## [2,] -0.0970282  0.6209816 -0.3942569  0.5915470
-## [3,] -0.4405330 -0.3942569  1.4416591 -0.3547308
-## [4,] -0.0995642  0.5915470 -0.3547308  0.5655560</code></pre>
-<p>This is pretty close to the results in <code>res$vcov</code> that we obtained 1 times faster with <code>Mestim</code>.</p>
+<pre><code>##              [,1]        [,2]       [,3]         [,4]
+## [1,]  0.166959339 -0.00255421 -0.1636470 -0.002452947
+## [2,] -0.002554210  0.24003558 -0.1433816  0.240057058
+## [3,] -0.163647006 -0.14338163  0.4128908 -0.143436074
+## [4,] -0.002452947  0.24005706 -0.1434361  0.240449603</code></pre>
+<p>This is pretty close to the results in <code>res$vcov</code> that we obtained 43.5 times faster with <code>Mestim</code>.</p>
 </div>
 <div id="example-3-value-estimation-for-dynamic-treatment-regime" class="section level2">
 <h2>Example 3: Value estimation for dynamic treatment regime</h2>
@@ -497,15 +497,15 @@ return(dat)
 }</code></pre>
 </details>
 <p><br></p>
-<pre class="r"><code>dat &lt;- gen_dtr_dat(10000)
+<pre class="r"><code>dat &lt;- gen_dtr_dat(5000)
 head(dat)</code></pre>
-<pre><code>##         S_1 A_1       S_2 A_2         Y
-## 1 0.9483774   0 0.8531794   1 0.9789192
-## 2 0.9854905   1 0.6989019   1 0.8782489
-## 3 1.1105378   1 0.7566110   1 0.8014279
-## 4 0.8156413   0 0.9575166   1 0.9136672
-## 5 0.8191443   0 0.9693241   0 0.8453340
-## 6 1.0009509   0 1.1241258   1 0.9894468</code></pre>
+<pre><code>##         S_1 A_1       S_2 A_2        Y
+## 1 0.8402181   1 0.9292966   1 1.046362
+## 2 1.0033476   0 1.0623962   0 1.024897
+## 3 1.0889107   0 1.0687287   0 1.152630
+## 4 0.8716224   1 0.8938716   1 1.069209
+## 5 0.9743708   1 0.9324451   1 1.189594
+## 6 1.0222173   1 0.9174528   1 1.195341</code></pre>
 <p>Given any treatment action regime <span class="math inline">\(d=\{d_1,\ldots, d_T\}^T\)</span>, an estimator for <span class="math inline">\(\mathbb{E}_{Z\sim d}(Y)\)</span> is
 <span class="math display" id="eq:label">\[\begin{equation}
 \tag{1}
@@ -599,7 +599,7 @@ thetas_hat &lt;- list(delta_1=delta_1_hat,
 <pre class="r"><code>res &lt;- get_vcov(data=dat, thetas=thetas_hat, M=psi)
 res$se</code></pre>
 <pre><code>##    delta_1    delta_2      phi_1      phi_2      phi_3          V 
-## 0.02007619 0.14202218 0.02784446 0.15906802 0.08292939 0.02369241</code></pre>
+## 0.02836275 0.19963843 0.03921097 0.22778301 0.12032851 0.03641272</code></pre>
 Let’s see how the results compare with standard errors obtained from the bootstrap.
 <details>
 <summary>
@@ -629,28 +629,28 @@ Let’s see how the results compare with standard errors obtained from the boots
   return( c(delta_1_hat, delta_2_hat, phi_1_hat, phi_2_hat, phi_3_hat, V_hat) )
 }
 boot_start_time &lt;- Sys.time()
-res_boot &lt;- boot::boot(dat, boot_fun, R=9)
+res_boot &lt;- boot::boot(dat, boot_fun, R=999)
 boot_end_time &lt;- Sys.time()
 paste(&quot;Bootstrapping took&quot;, round(as.numeric(boot_end_time - boot_start_time), 2), &quot;seconds.&quot;)</code></pre>
-<pre><code>## [1] &quot;Bootstrapping took 0.46 seconds.&quot;</code></pre>
+<pre><code>## [1] &quot;Bootstrapping took 20.74 seconds.&quot;</code></pre>
 </details>
 <pre><code>## 
 ## ORDINARY NONPARAMETRIC BOOTSTRAP
 ## 
 ## 
 ## Call:
-## boot::boot(data = dat, statistic = boot_fun, R = 9)
+## boot::boot(data = dat, statistic = boot_fun, R = 999)
 ## 
 ## 
 ## Bootstrap Statistics :
 ##        original        bias    std. error
-## t1* -0.08846046 -2.163801e-03  0.02284611
-## t2*  1.04094740  2.289716e-02  0.13200214
-## t3*  0.14597282  1.391273e-05  0.02765841
-## t4*  1.06264167 -1.378865e-01  0.18640433
-## t5*  2.93828421 -4.121071e-02  0.08724680
-## t6*  0.90198316 -1.770405e-02  0.02117803</code></pre>
-<p>This is pretty close to the results in <code>res$se</code> that we obtained 2.2 times faster with <code>Mestim</code>.</p>
+## t1* -0.10641382 -0.0002500751  0.02843059
+## t2*  0.65733524  0.0080253525  0.20518095
+## t3*  0.07486354  0.0005029474  0.03972660
+## t4*  1.22872312 -0.0066237516  0.23196144
+## t5*  3.12746280  0.0087706975  0.12208167
+## t6*  0.83983316  0.0021767814  0.03644645</code></pre>
+<p>This is pretty close to the results in <code>res$se</code> that we obtained 182.5 times faster with <code>Mestim</code>.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>

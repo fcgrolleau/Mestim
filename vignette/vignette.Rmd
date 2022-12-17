@@ -65,7 +65,7 @@ return(dat)
 </details>
 <br>
 ```{r, message=FALSE, warning=FALSE}
-dat <- gen_lr_dat(2000)
+dat <- gen_lr_dat(5000)
 head(dat)
 ```
 
@@ -146,7 +146,7 @@ return(dat)
 </details>
 <br>
 ```{r, message=FALSE, warning=FALSE}
-dat <- gen_obs_dat(2000)
+dat <- gen_obs_dat(5000)
 head(dat)
 ```
 In this example, the goal is to calculate standard errors for the outcome regression average causal effect estimator
@@ -218,7 +218,7 @@ boot_fun <- function(d, i=1:nrow(d)) {
   return( c(gamma_1_hat, gamma_2_hat, gamma_3_hat, delta_hat) )
 }
 boot_start_time <- Sys.time()
-res_boot <- boot::boot(dat, boot_fun, R=9)
+res_boot <- boot::boot(dat, boot_fun, R=999)
 boot_end_time <- Sys.time()
 paste("Bootstrapping took", round(as.numeric(boot_end_time - boot_start_time), 2), "seconds.")
 ```
@@ -273,7 +273,7 @@ return(dat)
 </details>
 <br>
 ```{r, message=FALSE, warning=FALSE}
-dat <- gen_dtr_dat(10000)
+dat <- gen_dtr_dat(5000)
 head(dat)
 ```
 Given any treatment action regime $d=\{d_1,\ldots, d_T\}^T$, an estimator for $\mathbb{E}_{Z\sim d}(Y)$ is 
@@ -417,7 +417,7 @@ boot_fun <- function(d, i=1:nrow(d)) {
   return( c(delta_1_hat, delta_2_hat, phi_1_hat, phi_2_hat, phi_3_hat, V_hat) )
 }
 boot_start_time <- Sys.time()
-res_boot <- boot::boot(dat, boot_fun, R=9)
+res_boot <- boot::boot(dat, boot_fun, R=999)
 boot_end_time <- Sys.time()
 paste("Bootstrapping took", round(as.numeric(boot_end_time - boot_start_time), 2), "seconds.")
 ```

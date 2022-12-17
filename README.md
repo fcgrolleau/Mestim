@@ -33,7 +33,7 @@ Find more information in the <a href="https://fcgrolleau.github.io/Mestim/vignet
 This package is written and maintained by François Grolleau (francois.grolleau@aphp.fr).
 
 ### References
-- Stefanski, LA. and Boos DD.
-<b>The Calculus of M-Estimation.</b> 2002.[<a href="https://www.tandfonline.com/doi/abs/10.1198/000313002753631330"> The American Statistician</a>]
+- Boos DD. and Stefanski, LA.
+<b>Essential Statistical Inference.</b> 2013.[<a href="https://doi.org/10.1007/978-1-4614-4818-1"> Springer </a>]
 - Tsiatis, AA., Davidian, M., Holloway, ST. and Laber, EB.
 <b>Dynamic Treatment Regimes: Statistical Methods for Precision Medicine.</b> 2019. [<a href="https://doi.org/10.1201/9780429192692">CRC Press</a>]
