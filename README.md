@@ -2,7 +2,8 @@
 
 <!-- badges: start -->
 [![PyPI Latest Release](https://img.shields.io/pypi/v/speedboot.svg)](https://pypi.org/project/speedboot/)
-[![R-CMD-check](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)]
+
+[![R-CMD-check](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/Mestim)](https://cran.r-project.org/package=Mestim)
 [![license](https://img.shields.io/badge/license-MIT-blue)]
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
