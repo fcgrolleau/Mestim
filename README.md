@@ -13,7 +13,7 @@ install_github("fcgrolleau/Mestim")
 
 ### Implementation
 ```
-library("Mestim")
+library(Mestim)
 
 # Put estimated parameters in a list
 thetas_hat <- list(theta_1=coef(mod)[1], theta_2=coef(mod)[2])
@@ -27,7 +27,7 @@ est_functions <- list(M_1, M_2)
 ## Pass arguments to get_vcov and obtain what you are looking for
 res <- get_vcov(data=dat, thetas=thetas_hat, M=est_functions)
 ```
-Find more information in the <a href="https://github.com/fcgrolleau/Mestim/vignette/vignette.html"> introduction vignette</a>.
+Find more information in the <a href="https://fcgrolleau.github.io/Mestim/vignette/vignette.html"> introduction vignette</a>.
 
 ### Authors
 This package is written and maintained by François Grolleau (francois.grolleau@aphp.fr).
