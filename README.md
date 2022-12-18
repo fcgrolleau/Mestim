@@ -4,7 +4,7 @@
 [![R-CMD-check](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/Mestim)](https://cran.r-project.org/package=Mestim)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![license](https://img.shields.io/badge/license-MIT-blue)](https://img.shields.io/badge/license-MIT-blue)
+[![license](https://img.shields.io/badge/license-MIT-blue)](https://github.com/fcgrolleau/Mestim/blob/master/LICENSE.md)
 [![R badge](https://img.shields.io/badge/Build%20with-♥%20and%20R-blue)](https://img.shields.io/badge/Build%20with-♥%20and%20R-blue)
 <!-- badges: end -->
 
