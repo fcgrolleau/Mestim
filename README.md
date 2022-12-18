@@ -5,7 +5,7 @@
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/Mestim)](https://cran.r-project.org/package=Mestim)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![license](https://img.shields.io/badge/license-MIT-blue)](https://github.com/fcgrolleau/Mestim/blob/master/LICENSE.md)
-[![R badge](https://img.shields.io/badge/Build%20with-♥%20and%20R-blue)]([https://img.shields.io/badge/Build%20with-♥%20and%20R-blue](https://www.r-project.org))
+[![R badge](https://img.shields.io/badge/Build%20with-♥%20and%20R-blue)](https://www.r-project.org)
 <!-- badges: end -->
 
 This package provides a flexible framework for estimating the variance-covariance matrix of estimated parameters.
