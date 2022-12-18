@@ -5,7 +5,7 @@ get_vcov <- function (data, thetas, M)
   list2env(thetas, environment())
   thetas_names <- names(thetas)
   multi_deriv <- function(M_i) {
-    lapply(thetas_names, function(beta) D(M_i, beta))
+    lapply(thetas_names, function(beta) stats::D(M_i, beta))
   }
   jacob <- lapply(M, multi_deriv)
   mid <- sapply(M, function(it) eval(it))

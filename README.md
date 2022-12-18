@@ -7,7 +7,7 @@ Estimation relies on providing unbiased estimating functions to compute the empi
 
 ### Installation
 ```
-library("devtools")
+library(devtools)
 install_github("fcgrolleau/Mestim")
 ```
 
