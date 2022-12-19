@@ -1,6 +1,7 @@
-# Mestim 0.2.0
+# Mestim 0.2.1
 
-* Fix Index Entry
+* Fix VignetteIndexEntry
+* Clarifications on the vignette
 
 # Mestim 0.2.0
 

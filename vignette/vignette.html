@@ -261,7 +261,7 @@ In practice, this means that the estimator <span class="math inline">\(T\)</span
 For a <span class="math inline">\(\psi\)</span>-type M-estimator <span class="math inline">\(T\)</span> with estimate <span class="math inline">\(\hat{\theta}\)</span>, under suitable regularity conditions for <span class="math inline">\(\psi\)</span>, the central limit theorem and Slutsky’s theorem yield
 <span class="math display">\[\sqrt{n}\big(\hat{\theta}-T(F)\big)\xrightarrow{\mathcal{D}}\mathcal{N}\big(0, \Sigma)\]</span>
 where <span class="math display">\[\Sigma=\Bigg[\mathbb{E}\bigg\{\frac{\partial \psi\big(Z,T(F)\big) }{\partial\theta^T}\bigg\}\Bigg]^{-1}\mathbb{E}\Big\{ \psi\big(Z,T(F)\big) \psi^T\big(Z,T(F)\big)\Big\}\Bigg[\mathbb{E}\bigg\{\frac{\partial \psi\big(Z,T(F)\big) }{\partial\theta^T}\bigg\}\Bigg]^{-T}.\]</span>
-This implies that the <span class="math inline">\(p\)</span>-dimentional M-estimator <span class="math inline">\(\hat{\theta}\)</span> is an asymptotically normal, <span class="math inline">\(\sqrt{n}\)</span>-consistent, estimator for <span class="math inline">\(T(F)\)</span>.
+This implies that the <span class="math inline">\(p\)</span>-dimensional M-estimator <span class="math inline">\(\hat{\theta}\)</span> is an asymptotically normal, <span class="math inline">\(\sqrt{n}\)</span>-consistent, estimator for <span class="math inline">\(T(F)\)</span>.
 See <a href="http://ndl.ethernet.edu.et/bitstream/123456789/61932/1/265.pdf">Boos and Stefanski (2013)</a> for a full introduction to M-estimation.</p>
 </div>
 <div id="what-mestim-does" class="section level2">
@@ -277,7 +277,7 @@ Under the hood, <code>Mestim</code> algorithmically computes the Jacobian matrix
 <div id="example-1-prediction-task-via-logistic-regression" class="section level2">
 <h2>Example 1: Prediction task via logistic regression</h2>
 <p>Let’s try to compute the asymptotic standard errors of estimated parameters in a logistic regression model. This simple example serves to get familiar with <code>Mestim</code> commands.</p>
-Let’s generate syntetic data with two predictors and a binary outcome such that <span class="math inline">\(Z=(X_1,X_2,Y)^T\)</span>.
+Let’s generate synthetic data with two predictors and a binary outcome such that <span class="math inline">\(Z=(X_1,X_2,Y)^T\)</span>.
 <details>
 <summary>
 <em>click here to see the data generating process.</em>
@@ -448,17 +448,17 @@ Let’s see how the results compare with standard errors obtained from the boots
   return( c(gamma_1_hat, gamma_2_hat, gamma_3_hat, delta_hat) )
 }
 boot_start_time &lt;- Sys.time()
-res_boot &lt;- boot::boot(dat, boot_fun, R=999)
+res_boot &lt;- boot::boot(dat, boot_fun, R=9)
 boot_end_time &lt;- Sys.time()
 paste(&quot;Bootstrapping took&quot;, round(as.numeric(boot_end_time - boot_start_time), 2), &quot;seconds.&quot;)</code></pre>
-<pre><code>## [1] &quot;Bootstrapping took 3.9 seconds.&quot;</code></pre>
+<pre><code>## [1] &quot;Bootstrapping took 0.07 seconds.&quot;</code></pre>
 </details>
-<pre><code>##              [,1]        [,2]       [,3]         [,4]
-## [1,]  0.166959339 -0.00255421 -0.1636470 -0.002452947
-## [2,] -0.002554210  0.24003558 -0.1433816  0.240057058
-## [3,] -0.163647006 -0.14338163  0.4128908 -0.143436074
-## [4,] -0.002452947  0.24005706 -0.1434361  0.240449603</code></pre>
-<p>This is pretty close to the results in <code>res$vcov</code> that we obtained 43.5 times faster with <code>Mestim</code>.</p>
+<pre><code>##             [,1]        [,2]       [,3]        [,4]
+## [1,]  0.08805982  0.01518684 -0.1602599  0.01678783
+## [2,]  0.01518684  0.30118294 -0.2071500  0.29723851
+## [3,] -0.16025989 -0.20714996  0.5470678 -0.20361311
+## [4,]  0.01678783  0.29723851 -0.2036131  0.29357711</code></pre>
+<p>This is pretty close to the results in <code>res$vcov</code> that we obtained 0.8 times faster with <code>Mestim</code>.</p>
 </div>
 <div id="example-3-value-estimation-for-dynamic-treatment-regime" class="section level2">
 <h2>Example 3: Value estimation for dynamic treatment regime</h2>
@@ -509,13 +509,13 @@ head(dat)</code></pre>
 <p>Given any treatment action regime <span class="math inline">\(d=\{d_1,\ldots, d_T\}^T\)</span>, an estimator for <span class="math inline">\(\mathbb{E}_{Z\sim d}(Y)\)</span> is
 <span class="math display" id="eq:label">\[\begin{equation}
 \tag{1}
-\hat{\mathcal{V}}_{IPW}(d)=n^{-1}\sum_{i=1}^nY_i\prod_{t=1}^T\frac{\mathbf{1}\big({d_t(S_{t,i})=A_{t,i}}\big)}{\hat{e}_t\Big(S_{t,i},A_{t-1,i},S_{t-1,i}, \ldots,S_{1,i}\Big)^{d_t(S_{t,i})}\bigg\{1-\hat{e}_t\Big(S_{t,i},A_{t-1,i},S_{t-1,i}, \ldots,S_{1,i}\Big)\bigg\}^{1-d_t(S_{t,i})} }
+\hat{\mathcal{V}}_{IPW}(d)=n^{-1}\sum_{i=1}^nY_i\prod_{t=1}^T\frac{\mathbf{1}\big({d_t(H_{t,i})=A_{t,i}}\big)}{\hat{e}_t(H_{t,i})^{d_t(H_{t,i})}\big\{1-\hat{e}_t(H_{t,i})\big\}^{1-d_t(H_{t,i})} }
 \end{equation}\]</span></p>
-<p>where we write the relevant generalization of the propensity score as <span class="math inline">\(e_t\Big(S_{t},A_{t-1},S_{t-1}, \ldots,S_{1}\Big)=\mathbb{E}\Big(A_{t}|S_{t},A_{t-1},S_{t-1}, \ldots,S_{1}\Big).\)</span></p>
-<p>In this example we consider the regime <span class="math inline">\(\tilde{d}=\{\tilde{d}_1(S_1)=\mathbf{1}_{S_1&gt;1},\tilde{d}_2(S_2)=\mathbf{1}_{S_2&gt;1}\}\)</span>. The goal is to calculate standard errors for <span class="math inline">\(\hat{\mathcal{V}}_{IPW}(\tilde{d})\)</span>.
-As <span class="math inline">\(T=2\)</span>, we need specify models for <span class="math inline">\(e_1(S_1)\)</span> and <span class="math inline">\(e_2(S_2,A_1,S_1)\)</span>. Let’s specify the parametric regression models
-<span class="math display">\[e_1(S_1;\boldsymbol{\delta})=\text{expit}\big(\delta_1+\delta_2\log S_1)\]</span>
-and <span class="math display">\[e_2(S_2,A_1,S_1;\boldsymbol{\phi})=\text{expit}\big(\phi_1+\phi_2\log S_2 +\phi_3A_1).\]</span> We fit and store the estimated parameters as follows.</p>
+<p>where we use the history notation <span class="math inline">\(H_t=(S_{t},A_{t-1},S_{t-1}, \ldots,S_{1})^T\)</span> and write the relevant generalization of the propensity score as <span class="math inline">\(e_t(H_t)=\mathbb{E}(A_{t}|H_t).\)</span></p>
+<p>In this example we consider the regime <span class="math inline">\(\tilde{d}(Z)=\{\tilde{d}_1(H_1)=\mathbf{1}_{S_1&gt;1},\tilde{d}_2(H_2)=\mathbf{1}_{S_2&gt;1}\}^T\)</span>. The goal is to calculate standard errors for <span class="math inline">\(\hat{\mathcal{V}}_{IPW}(\tilde{d})\)</span>.
+As <span class="math inline">\(T=2\)</span>, we need specify models for <span class="math inline">\(e_1(H_1)\)</span> and <span class="math inline">\(e_2(H_2)\)</span>. Let’s specify the parametric regression models
+<span class="math display">\[e_1(H_1;\boldsymbol{\delta})=\text{expit}\big(\delta_1+\delta_2\log S_1)\]</span>
+and <span class="math display">\[e_2(H_2;\boldsymbol{\phi})=\text{expit}\big(\phi_1+\phi_2\log S_2 +\phi_3A_1).\]</span> We fit and store the estimated parameters as follows.</p>
 <pre class="r"><code>e_1 &lt;- glm(A_1~I(log(S_1)), data=dat, family = &quot;binomial&quot;)
 delta_1_hat &lt;- coef(e_1)[1]
 delta_2_hat &lt;- coef(e_1)[2]
@@ -541,7 +541,7 @@ psi_2 &lt;- expression( ((1/(1+exp(-(delta_1 + delta_2 * log_S_1)))) - A_1) * lo
 psi_3 &lt;- expression( ((1/(1+exp(-(phi_1 + phi_2 * log_S_2 + phi_3 * A_1)))) - A_2) * 1 )
 psi_4 &lt;- expression( ((1/(1+exp(-(phi_1 + phi_2 * log_S_2 + phi_3 * A_1)))) - A_2) * log_S_2)
 psi_5 &lt;- expression( ((1/(1+exp(-(phi_1 + phi_2 * log_S_2 + phi_3 * A_1)))) - A_2) * A_1)</code></pre>
-<p>To obtain the last element of <span class="math inline">\(\psi\)</span>, we need to do algebraic manipulations. Denoting <span class="math inline">\(\mathcal{C}_{\tilde{d}, i}=\prod_{t=1}^2\mathbf{1}\big({\tilde{d}_t(S_{t,i})=A_{t,i}}\big)\)</span> for simplicity, after substitution for <span class="math inline">\(\hat{e}_1(S_1;\boldsymbol{\hat{\delta}})\)</span> and <span class="math inline">\(\hat{e}_2(S_2,A_1,S_1;\boldsymbol{\hat{\phi}})\)</span>, equation <a href="#eq:label">(1)</a> yields
+<p>To obtain the last element of <span class="math inline">\(\psi\)</span>, we need to do algebraic manipulations. Denoting <span class="math inline">\(\mathcal{C}_{\tilde{d}, i}=\prod_{t=1}^2\mathbf{1}\big({\tilde{d}_t(H_{t,i})=A_{t,i}}\big)\)</span> for simplicity, after substitution for <span class="math inline">\(\hat{e}_1(H_1;\boldsymbol{\hat{\delta}})\)</span> and <span class="math inline">\(\hat{e}_2(H_2;\boldsymbol{\hat{\phi}})\)</span>, equation <a href="#eq:label">(1)</a> yields
 <span class="math display">\[\begin{equation}
 \hat{\mathcal{V}}_{IPW}(\tilde{d})=\\
 n^{-1}\sum_{i=1}^nY_i\mathcal{C}_{\tilde{d}, i}
@@ -629,28 +629,28 @@ Let’s see how the results compare with standard errors obtained from the boots
   return( c(delta_1_hat, delta_2_hat, phi_1_hat, phi_2_hat, phi_3_hat, V_hat) )
 }
 boot_start_time &lt;- Sys.time()
-res_boot &lt;- boot::boot(dat, boot_fun, R=999)
+res_boot &lt;- boot::boot(dat, boot_fun, R=9)
 boot_end_time &lt;- Sys.time()
 paste(&quot;Bootstrapping took&quot;, round(as.numeric(boot_end_time - boot_start_time), 2), &quot;seconds.&quot;)</code></pre>
-<pre><code>## [1] &quot;Bootstrapping took 20.74 seconds.&quot;</code></pre>
+<pre><code>## [1] &quot;Bootstrapping took 0.24 seconds.&quot;</code></pre>
 </details>
 <pre><code>## 
 ## ORDINARY NONPARAMETRIC BOOTSTRAP
 ## 
 ## 
 ## Call:
-## boot::boot(data = dat, statistic = boot_fun, R = 999)
+## boot::boot(data = dat, statistic = boot_fun, R = 9)
 ## 
 ## 
 ## Bootstrap Statistics :
-##        original        bias    std. error
-## t1* -0.10641382 -0.0002500751  0.02843059
-## t2*  0.65733524  0.0080253525  0.20518095
-## t3*  0.07486354  0.0005029474  0.03972660
-## t4*  1.22872312 -0.0066237516  0.23196144
-## t5*  3.12746280  0.0087706975  0.12208167
-## t6*  0.83983316  0.0021767814  0.03644645</code></pre>
-<p>This is pretty close to the results in <code>res$se</code> that we obtained 182.5 times faster with <code>Mestim</code>.</p>
+##        original      bias    std. error
+## t1* -0.10641382  0.00813523  0.03512817
+## t2*  0.65733524  0.01267802  0.24107123
+## t3*  0.07486354  0.01518900  0.04285843
+## t4*  1.22872312 -0.02402540  0.15513470
+## t5*  3.12746280 -0.06300586  0.07250438
+## t6*  0.83983316 -0.02047907  0.03087136</code></pre>
+<p>This is pretty close to the results in <code>res$se</code> that we obtained 2.4 times faster with <code>Mestim</code>.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
