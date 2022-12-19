@@ -7,7 +7,7 @@ author:
 date: "December 17, 2022"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to geex}
+  %\VignetteIndexEntry{Introduction to Mestim}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

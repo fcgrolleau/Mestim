@@ -1,5 +1,9 @@
 # Mestim 0.2.0
 
+* Fix Index Entry
+
+# Mestim 0.2.0
+
 * Fix stacking errors in get_vcov
 * Add vignette.html file
 
