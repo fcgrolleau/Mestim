@@ -448,17 +448,17 @@ Let’s see how the results compare with standard errors obtained from the boots
   return( c(gamma_1_hat, gamma_2_hat, gamma_3_hat, delta_hat) )
 }
 boot_start_time &lt;- Sys.time()
-res_boot &lt;- boot::boot(dat, boot_fun, R=9)
+res_boot &lt;- boot::boot(dat, boot_fun, R=999)
 boot_end_time &lt;- Sys.time()
 paste(&quot;Bootstrapping took&quot;, round(as.numeric(boot_end_time - boot_start_time), 2), &quot;seconds.&quot;)</code></pre>
-<pre><code>## [1] &quot;Bootstrapping took 0.07 seconds.&quot;</code></pre>
+<pre><code>## [1] &quot;Bootstrapping took 4.46 seconds.&quot;</code></pre>
 </details>
-<pre><code>##             [,1]        [,2]       [,3]        [,4]
-## [1,]  0.08805982  0.01518684 -0.1602599  0.01678783
-## [2,]  0.01518684  0.30118294 -0.2071500  0.29723851
-## [3,] -0.16025989 -0.20714996  0.5470678 -0.20361311
-## [4,]  0.01678783  0.29723851 -0.2036131  0.29357711</code></pre>
-<p>This is pretty close to the results in <code>res$vcov</code> that we obtained 0.8 times faster with <code>Mestim</code>.</p>
+<pre><code>##              [,1]        [,2]       [,3]         [,4]
+## [1,]  0.166959339 -0.00255421 -0.1636470 -0.002452947
+## [2,] -0.002554210  0.24003558 -0.1433816  0.240057058
+## [3,] -0.163647006 -0.14338163  0.4128908 -0.143436074
+## [4,] -0.002452947  0.24005706 -0.1434361  0.240449603</code></pre>
+<p>This is pretty close to the results in <code>res$vcov</code> that we obtained 50.8 times faster with <code>Mestim</code>.</p>
 </div>
 <div id="example-3-value-estimation-for-dynamic-treatment-regime" class="section level2">
 <h2>Example 3: Value estimation for dynamic treatment regime</h2>
@@ -511,7 +511,7 @@ head(dat)</code></pre>
 \tag{1}
 \hat{\mathcal{V}}_{IPW}(d)=n^{-1}\sum_{i=1}^nY_i\prod_{t=1}^T\frac{\mathbf{1}\big({d_t(H_{t,i})=A_{t,i}}\big)}{\hat{e}_t(H_{t,i})^{d_t(H_{t,i})}\big\{1-\hat{e}_t(H_{t,i})\big\}^{1-d_t(H_{t,i})} }
 \end{equation}\]</span></p>
-<p>where we use the history notation <span class="math inline">\(H_t=(S_{t},A_{t-1},S_{t-1}, \ldots,S_{1})^T\)</span> and write the relevant generalization of the propensity score as <span class="math inline">\(e_t(H_t)=\mathbb{E}(A_{t}|H_t).\)</span></p>
+<p>where we use the history notation <span class="math inline">\(H_t=(S_{t},A_{t-1},S_{t-1}, \ldots,S_{1})^T\)</span> and write the relevant generalization of the propensity score as <span class="math inline">\(e_t(H_t)=\mathbb{E}(A_{t}|H_t)\)</span> for clarity.</p>
 <p>In this example we consider the regime <span class="math inline">\(\tilde{d}(Z)=\{\tilde{d}_1(H_1)=\mathbf{1}_{S_1&gt;1},\tilde{d}_2(H_2)=\mathbf{1}_{S_2&gt;1}\}^T\)</span>. The goal is to calculate standard errors for <span class="math inline">\(\hat{\mathcal{V}}_{IPW}(\tilde{d})\)</span>.
 As <span class="math inline">\(T=2\)</span>, we need specify models for <span class="math inline">\(e_1(H_1)\)</span> and <span class="math inline">\(e_2(H_2)\)</span>. Let’s specify the parametric regression models
 <span class="math display">\[e_1(H_1;\boldsymbol{\delta})=\text{expit}\big(\delta_1+\delta_2\log S_1)\]</span>
@@ -629,28 +629,28 @@ Let’s see how the results compare with standard errors obtained from the boots
   return( c(delta_1_hat, delta_2_hat, phi_1_hat, phi_2_hat, phi_3_hat, V_hat) )
 }
 boot_start_time &lt;- Sys.time()
-res_boot &lt;- boot::boot(dat, boot_fun, R=9)
+res_boot &lt;- boot::boot(dat, boot_fun, R=999)
 boot_end_time &lt;- Sys.time()
 paste(&quot;Bootstrapping took&quot;, round(as.numeric(boot_end_time - boot_start_time), 2), &quot;seconds.&quot;)</code></pre>
-<pre><code>## [1] &quot;Bootstrapping took 0.24 seconds.&quot;</code></pre>
+<pre><code>## [1] &quot;Bootstrapping took 21.22 seconds.&quot;</code></pre>
 </details>
 <pre><code>## 
 ## ORDINARY NONPARAMETRIC BOOTSTRAP
 ## 
 ## 
 ## Call:
-## boot::boot(data = dat, statistic = boot_fun, R = 9)
+## boot::boot(data = dat, statistic = boot_fun, R = 999)
 ## 
 ## 
 ## Bootstrap Statistics :
-##        original      bias    std. error
-## t1* -0.10641382  0.00813523  0.03512817
-## t2*  0.65733524  0.01267802  0.24107123
-## t3*  0.07486354  0.01518900  0.04285843
-## t4*  1.22872312 -0.02402540  0.15513470
-## t5*  3.12746280 -0.06300586  0.07250438
-## t6*  0.83983316 -0.02047907  0.03087136</code></pre>
-<p>This is pretty close to the results in <code>res$se</code> that we obtained 2.4 times faster with <code>Mestim</code>.</p>
+##        original        bias    std. error
+## t1* -0.10641382 -0.0002500751  0.02843059
+## t2*  0.65733524  0.0080253525  0.20518095
+## t3*  0.07486354  0.0005029474  0.03972660
+## t4*  1.22872312 -0.0066237516  0.23196144
+## t5*  3.12746280  0.0087706975  0.12208167
+## t6*  0.83983316  0.0021767814  0.03644645</code></pre>
+<p>This is pretty close to the results in <code>res$se</code> that we obtained 173 times faster with <code>Mestim</code>.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
