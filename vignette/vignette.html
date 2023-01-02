@@ -318,10 +318,10 @@ thetas_hat &lt;- list(thetas_1=coef(mod)[1], thetas_2=coef(mod)[2])</code></pre>
 and
 <span class="math display">\[\sum_{i=1}^{n}\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{2,i}
 =0.\]</span> Therefore, we can identify
-<span class="math display">\[\psi_1(Z_i,\theta_1)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{1,i}\]</span>
+<span class="math display">\[\psi_1(Z_i,\theta)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{1,i}\]</span>
 and
-<span class="math display">\[\psi_2(Z_i,\theta_1)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{2,i}.\]</span>
-With that in mind, let’s build a list for the unbiased estimating function <span class="math inline">\(\psi(z,\theta)=\Big(\psi_1(z,\theta_1), \psi_2(z,\theta_2)\Big)^T\)</span>.</p>
+<span class="math display">\[\psi_2(Z_i,\theta)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{2,i}.\]</span>
+With that in mind, let’s build a list for the unbiased estimating function <span class="math inline">\(\psi(z,\theta)=\Big(\psi_1(z,\theta), \psi_2(z,\theta)\Big)^T\)</span>.</p>
 <pre class="r"><code>psi_1 &lt;- expression( ((1/(1+exp(-(thetas_1 * X_1 + thetas_2 * X_2)))) - Y) * X_1 )
 psi_2 &lt;- expression( ((1/(1+exp(-(thetas_1 * X_1 + thetas_2 * X_2)))) - Y) * X_2 )
 psi &lt;- list(psi_1, psi_2)</code></pre>
@@ -451,14 +451,14 @@ boot_start_time &lt;- Sys.time()
 res_boot &lt;- boot::boot(dat, boot_fun, R=999)
 boot_end_time &lt;- Sys.time()
 paste(&quot;Bootstrapping took&quot;, round(as.numeric(boot_end_time - boot_start_time), 2), &quot;seconds.&quot;)</code></pre>
-<pre><code>## [1] &quot;Bootstrapping took 4.46 seconds.&quot;</code></pre>
+<pre><code>## [1] &quot;Bootstrapping took 4.07 seconds.&quot;</code></pre>
 </details>
 <pre><code>##              [,1]        [,2]       [,3]         [,4]
 ## [1,]  0.166959339 -0.00255421 -0.1636470 -0.002452947
 ## [2,] -0.002554210  0.24003558 -0.1433816  0.240057058
 ## [3,] -0.163647006 -0.14338163  0.4128908 -0.143436074
 ## [4,] -0.002452947  0.24005706 -0.1434361  0.240449603</code></pre>
-<p>This is pretty close to the results in <code>res$vcov</code> that we obtained 50.8 times faster with <code>Mestim</code>.</p>
+<p>This is pretty close to the results in <code>res$vcov</code> that we obtained 47.4 times faster with <code>Mestim</code>.</p>
 </div>
 <div id="example-3-value-estimation-for-dynamic-treatment-regime" class="section level2">
 <h2>Example 3: Value estimation for dynamic treatment regime</h2>
@@ -632,7 +632,7 @@ boot_start_time &lt;- Sys.time()
 res_boot &lt;- boot::boot(dat, boot_fun, R=999)
 boot_end_time &lt;- Sys.time()
 paste(&quot;Bootstrapping took&quot;, round(as.numeric(boot_end_time - boot_start_time), 2), &quot;seconds.&quot;)</code></pre>
-<pre><code>## [1] &quot;Bootstrapping took 21.22 seconds.&quot;</code></pre>
+<pre><code>## [1] &quot;Bootstrapping took 21 seconds.&quot;</code></pre>
 </details>
 <pre><code>## 
 ## ORDINARY NONPARAMETRIC BOOTSTRAP
@@ -650,7 +650,7 @@ paste(&quot;Bootstrapping took&quot;, round(as.numeric(boot_end_time - boot_star
 ## t4*  1.22872312 -0.0066237516  0.23196144
 ## t5*  3.12746280  0.0087706975  0.12208167
 ## t6*  0.83983316  0.0021767814  0.03644645</code></pre>
-<p>This is pretty close to the results in <code>res$se</code> that we obtained 173 times faster with <code>Mestim</code>.</p>
+<p>This is pretty close to the results in <code>res$se</code> that we obtained 190.5 times faster with <code>Mestim</code>.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>

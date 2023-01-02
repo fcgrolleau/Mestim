@@ -77,10 +77,10 @@ Recall that the estimated parameters $\hat{\theta}=(\hat{\theta}_1, \hat{\theta}
 and
 $$\sum_{i=1}^{n}\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{2,i}
 =0.$$ Therefore, we can identify
-$$\psi_1(Z_i,\theta_1)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{1,i}$$
+$$\psi_1(Z_i,\theta)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{1,i}$$
 and
-$$\psi_2(Z_i,\theta_1)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{2,i}.$$
-With that in mind, let's build a list for the unbiased estimating function $\psi(z,\theta)=\Big(\psi_1(z,\theta_1), \psi_2(z,\theta_2)\Big)^T$.
+$$\psi_2(Z_i,\theta)=\bigg(\Big[1+\exp\big\{-{(\theta_1X_{1,i}+\theta_2X_{2,i})\big\}\Big]^{-1}}-Y_i\bigg)X_{2,i}.$$
+With that in mind, let's build a list for the unbiased estimating function $\psi(z,\theta)=\Big(\psi_1(z,\theta), \psi_2(z,\theta)\Big)^T$.
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 psi_1 <- expression( ((1/(1+exp(-(thetas_1 * X_1 + thetas_2 * X_2)))) - Y) * X_1 )
 psi_2 <- expression( ((1/(1+exp(-(thetas_1 * X_1 + thetas_2 * X_2)))) - Y) * X_2 )
