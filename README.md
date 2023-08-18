@@ -1,7 +1,6 @@
 # Mestim
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/cosimameyer/overviewR/workflows/R-CMD-check/badge.svg)](https://www.r-bloggers.com/2020/07/how-to-write-your-own-r-package-and-publish-it-on-cran/)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/Mestim)](https://cran.r-project.org/package=Mestim)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![license](https://img.shields.io/badge/license-MIT-blue)](https://github.com/fcgrolleau/Mestim/blob/master/LICENSE.md)
